@@ -1,0 +1,15 @@
+{
+  "name": "recipe-app",
+  "version": "1.0.0",
+  "description": "Create, manage, and share recipes.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Jonathan Walker",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
