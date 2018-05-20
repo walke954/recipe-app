@@ -4,12 +4,18 @@
   "description": "Create, manage, and share recipes.",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha --exit",
     "start": "node server.js"
   },
   "author": "Jonathan Walker",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.3"
+    "chai-http": "^4.0.0",
+    "express": "^4.16.3",
+    "morgan": "^1.9.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0"
   }
 }
