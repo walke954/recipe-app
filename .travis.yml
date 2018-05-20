@@ -7,3 +7,5 @@ deploy:
   app: tranquil-retreat-17012
   on:
     repo: walke954/recipe-app
+services:
+- mongodb
