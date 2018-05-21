@@ -1,0 +1,23 @@
+{
+  "name": "recipe-app",
+  "version": "1.0.0",
+  "description": "Create, manage, and share recipes.",
+  "main": "server.js",
+  "scripts": {
+    "test": "mocha --exit",
+    "start": "node server.js"
+  },
+  "author": "Jonathan Walker",
+  "license": "ISC",
+  "dependencies": {
+    "chai-http": "^4.0.0",
+    "express": "^4.16.3",
+    "mongod": "^2.0.0",
+    "mongoose": "^5.1.1",
+    "morgan": "^1.9.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0"
+  }
+}

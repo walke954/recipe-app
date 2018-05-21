@@ -1,0 +1,11 @@
+language: node_js
+node_js: node
+deploy:
+  provider: heroku
+  api_key:
+    secure: KDTxJ6ka0MJUrKxxPkWgNFRuOrm7AaIhyfhSVFp0r8IaauWLjhE1cIwfdNukMQ/RxmBNCz/ZUSgpkz/+IuuFDvvDWMkvDhMQbGjiXMAneNxYEAhLXAdKisTqk6DUhZQyUqK+nHLH9gkLh9hnlbQ6ItVyOQhLmiIkoLlLOy/IFqw+xNM0Sa9xxTybhQeB1UB1vr/+/Hlv8O5fLVSlZ2vY3IE+lDT41y4csqYpuA0Vi+EdlUTgLgHr6DlCCjcJ2ns5eKdlLisNMey5DuYQEPl32e040dLLROXr8Hk3CrSqdZXAcqYEYCLT35GnBaRvW8CNsSKp2/F0TVMY6+jYnYh8rg7RCa6O3dn8fGnd9ivHrHJWNwKt65H13tqPYdVCg9x+yy2Hft9QMNklOPN6dGiyRNA/8duXpolRdpEhLHTTshlapLFxi+Dho7EF/5oGjikEnclv54/jdcxskGs4pW7p1cWIi78zvO9i1QanA5/CLAZPfX6/S4QGrN0kJuHtjXYAinINHlxwJ448KK4r5e1LPl1Z5hYE7+Apof4577nmhwguUJJclF5f0z4KYdAugSimFrmt7qAoeuDkGsVnwiisCQF29z2SLm3McYp8cOcAD/XqDyVp5HFzCv+oq38ZNUlZyZOaadLHSF4OjrwZkEkdoUCViFoER6TkSJNQCpvtQmg=
+  app: tranquil-retreat-17012
+  on:
+    repo: walke954/recipe-app
+services:
+- mongodb
