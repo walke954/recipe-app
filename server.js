@@ -8,10 +8,26 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const {PORT, DATABASE_URL} = require('./config');
-// const {Recipes} = require('./models');
+const {Recipes} = require('./models');
 
 app.use(express.static('public'));
 app.use(morgan('common'));
+
+app.get('/recipes', (req, res) => {
+	Recipes
+		.find()
+		.limit(10)
+		.then(recipes => {
+			res.json({
+				recipes: recipes.map(
+					(recipe) => recipe.serialize())
+			});
+		})
+		.catch(err => {
+			console.log(err);
+			res.status(500).json({message: 'Internal Server Error'});
+		});
+});
 
 let server;
 
