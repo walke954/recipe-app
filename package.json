@@ -10,6 +10,7 @@
   "author": "Jonathan Walker",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "chai-http": "^4.0.0",
     "express": "^4.16.3",
     "mongod": "^2.0.0",

@@ -2,95 +2,87 @@
 <html>
 <head>
 	<title></title>
+	<link rel="stylesheet" href="calendar.css">
 	<link rel="stylesheet" href="index.css">
+	<link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet">
+	<meta charset="utf-8">
 </head>
 <body>
 	<header>
 		<div id="header-left">
-			<h1>Recipe App</h1>
-			<form action="" method="" id="search-bar">
-				<fieldset>
-					<label for="search-bar"></label>
-					<input type="text" name="search-bar">
-					<button id="search-bar-submit">Search</button>
-				</fieldset>
-			</form>
-			<p>User Name</p>
-			<p>Browse</p>
-			<p>Published</p>
-			<p>Archive</p>
+			<h1>Personal Reflective Journal</h1>
 		</div>
 		<div id="header-right">
-			<p>Settings</p>
+			<p>About</p>
+			<p>Past Entries</p>
+			<p>New Entry</p>
 			<p>Login</p>
 		</div>
 	</header>
 	<main>
-		<div class="col-8">
-			<div class="row">
-				<h2>Showcased Recipes</h2>
-				<div class="little-text">
-					<h3>Title</h3>
-					<h4>Ingredients</h4>
-					<ul>
-						<li>Ingredient 1 and amount</li>
-						<li>Ingredient 2 and amount</li>
-						<li>Ingredient 3 and amount</li>
-					</ul>
-					<h4>Directions</h4>
-					<ol>
-						<li>Step 1</li>
-						<li>Step 2</li>
-						<li>Step 3</li>
-					</ol>
+		<section id="dynamic-page" class="col-8">
+			<section class="row" id="about-row">
+				<h2>About</h2>
+				<h3>What is 'Personal Reflective Journal'?</h3>
+				<p>The 'Person Reflective Journal' is a personal journal that is accessible to you and you alone. The journal utilizes a series of prompts that can allow you to reflect on the day and explore your emotional or personal state. I believe that reflection is one of the keys to dealing with our own personal struggles and that by writing (or typing) these conflicts can lead to clarity and positivity. While this should never completely substitute actual therapy conducted by a professional, this could certainly be used as a helpful tool for discovering your place in the world.</p>
+				<h3>How does it work?</h3>
+				<p>At the top of your 'Personal Page', you will see a calendar filled in with dates. Previous entries can be accessed through this interface in case you want to go back and read past entries. New entries can be posted through the 'New Entry' link, and can only be posted once per day. Each post consists of a series of required and optional prompts. Click the 'Post' button to create a new entry!</p>
+			</section>
+			<section class="row" id="calendar-row">
+				<h2>Find An Entry</h2>
+				<div id="calendar-section">
+					<h3 id="calendar-header"></h3>
+					<button id="prev-button" class="calendar-buttons" disabled="true">Previous</button>
+					<button id="next-button" class="calendar-buttons" disabled="true">Next</button>
+					<table id="calendar"></table>
 				</div>
-			</div>
-		</div>
-		<div class="col-8">
-			<div class="row">
-				<h2>Published Recipes</h2>
-				<div class="published-recipe">
-					<h3>Title</h3>
-					<h4>Ingredients</h4>
-					<ul>
-						<li>Ingredient 1 and amount</li>
-						<li>Ingredient 2 and amount</li>
-						<li>Ingredient 3 and amount</li>
-					</ul>
-					<button id="show-hide-button">Show/Hide</button>
-					<button id="delete-button">Delete</button>
+				<img id="journal1-pic" src="journal1.jpg">
+			</section>
+			<section class="row" id="entries-row">
+				<h2>Recent Entries</h2>
+				<div class="entry-excerpt">
+					<h3>Date, Entry Title</h3>
+					<p>Summary and stuff that a person would write in and it could be cool I guess.</p>
+					<button id="re-edit-button">Edit</button><button id="re-delete-button">Delete</button>
 				</div>
-				<div class="published-recipe">
-					<h3>Title</h3>
-					<h4>Ingredients</h4>
-					<ul>
-						<li>Ingredient 1 and amount</li>
-						<li>Ingredient 2 and amount</li>
-						<li>Ingredient 3 and amount</li>
-					</ul>
+				<div class="entry-excerpt">
+					<h3>Date, Entry Title</h3>
+					<p>Summary and stuff that a person would write in and it could be cool I guess.</p>
+					<button id="re-edit-button">Edit</button><button id="re-delete-button">Delete</button>
 				</div>
-				<div class="published-recipe">
-					<h3>Title</h3>
-					<h4>Ingredients</h4>
-					<ul>
-						<li>Ingredient 1 and amount</li>
-						<li>Ingredient 2 and amount</li>
-						<li>Ingredient 3 and amount</li>
-					</ul>
+				<div class="entry-excerpt">
+					<h3>Date, Entry Title</h3>
+					<p>Summary and stuff that a person would write in and it could be cool I guess.</p>
+					<button id="re-edit-button">Edit</button><button id="re-delete-button">Delete</button>
 				</div>
-			</div>
-		</div>
-		<div class="col-8">
-			<div class="row">
-				<form>
-					<h2>Create New Recipe</h2>
+				<button>Later Entries</button>
+				<button>Earlier Entries</button>
+				<div>
+					<h2>Selected Entry</h2>
+					<h3>Prompt</h3>
+					<p>here is text for this</p>
+					<h3>Prompt</h3>
+					<p>here is text for this</p>
+					<h3>Prompt</h3>
+					<p>here is text for this</p>
+				</div>
+			</section>
+			<section id="create-entry-section">
+				<h2>Create An Entry</h2>
+				<form method="post" action="">
 					<fieldset>
-						
+						<legend></legend>
+						<div class="inactive-prompt">
+							<label for="text-prompt-name">Prompt</label>
+							<textarea name="prompt-text-name" class="hidden"></textarea>
+							<button class="hidden">Hide</button>
+						</div>
 					</fieldset>
-					<button id="create-button">Create</button>
 				</form>
-			</div>
-		</div>
+			</section>
+		</section>
 	</main>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script type="text/javascript" src="calendar.js"></script>
 </body>
 </html>

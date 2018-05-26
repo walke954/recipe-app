@@ -1,0 +1,96 @@
+* {
+	box-sizing: content-box;
+	margin: 0px;
+	padding: 0px;
+	outline: 0px;
+}
+
+body {
+	background-color: black;
+}
+
+header {
+	background-color: #063852;
+	color: white;
+	padding: 5px;
+	vertical-align: middle;
+}
+
+#header-left {
+	display: inline-block;
+	padding-right: 20px;
+}
+
+#header-right {
+	display: inline-block;
+}
+
+header p {
+	display: inline-block;
+	padding-right: 20px;
+}
+
+main {
+	padding: 10px;
+}
+
+#about-row {
+	background-color: #eaeff9;
+	padding: 10px;
+	border-radius: 2px;
+}
+
+#calendar-row {
+	color: white;
+	text-align: center;
+	padding: 20px;
+}
+
+#calendar-row h2 {
+	padding: 10px;
+}
+
+#calendar-section {
+
+}
+
+#journal1-pic {
+	padding: 20px;
+	width: 150px;
+	vertical-align: middle;
+}
+
+#entries-row {
+	background-color: #eaeff9;
+	padding: 10px;
+	border-radius: 2px;
+}
+
+#create-entry-section {
+	padding: 10px;
+	background-color: #eaeff9;
+	border-radius: 2px;
+}
+
+fieldset {
+	background-color: #eaeff9;
+	border: none;
+}
+
+textarea {
+	resize: none;
+	width: 80%;
+}
+
+.inactive-prompt {
+	color: gray;
+}
+
+.inactive-prompt:hover {
+	color: gray;
+	background-color: #5dff7f;
+}
+
+.hidden {
+	display: none;
+}

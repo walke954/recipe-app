@@ -1,0 +1,67 @@
+#calendar-section {
+	background-color: #063852;
+	color: white;
+	padding: 5px;
+	width: 280px;
+	text-align: center;
+	border-radius: 2px;
+	font-family: 'Merriweather', serif;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+#calendar-section:hover {
+	cursor: default;
+}
+
+td {
+	background-color: #4CB5F5;
+	color: black;
+	width: 30px;
+	border-radius: 2px;
+	text-align: center;
+	transition: 0.8s;
+	-webkit-transition: 0.8s;
+	padding: 4px;
+	font-size: 14px;
+}
+
+td:hover {
+	cursor: default;
+}
+
+td[data-day]:hover {
+	background-color: #5dff7f;
+	cursor: pointer;
+}
+
+td[data-current-day] {
+	background-color: #DFE166;
+}
+
+.calendar-buttons {
+	transition: 0.5s;
+	-webkit-transition: 0.5s;
+	background-color: #F0810F;
+	border: none;
+	border-radius: 2px;
+	width: 120px;
+	height: 40px;
+	font-weight: bold;
+	color: white;
+}
+
+.calendar-buttons:hover {
+	background-color: #ef4e0e;
+	cursor: pointer;
+}
+
+.calendar-buttons:disabled {
+	background-color: grey;
+	cursor: default;
+}
+
+#calendar-header {
+	font-size: 25px;
+	margin: 5px;
+}
