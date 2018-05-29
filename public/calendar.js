@@ -56,13 +56,18 @@ function adjustCalendarLeapYear(new_year){
 }
 
 function constructCalendar(){
+	let firstDay = new Date();
 	const days_in_month = Object.values(DAYS_IN_MONTH[current_month])[0];
-	const start_day = current_day - ((current_date - Math.floor(current_date/7) * 7) - 1);
+	firstDay.setDate(1);
+	firstDay.setMonth(current_month);
+	firstDay.setFullYear(current_year);
+	const start_day = firstDay.getDay();
 
 	let index_day = 1;
 	let firstRow = true;
 
-	$('#calendar').html(
+
+	$($('#dynamic-page').find('#calendar')).html(
 					`<tr>
 						<td class="day">Sun</td>
 						<td class="day">Mon</td>
@@ -73,10 +78,10 @@ function constructCalendar(){
 						<td class="day">Sat</td>
 					</tr>`);
 
-	$('#calendar-header').html(`${Object.keys(DAYS_IN_MONTH[current_month])[0]}, ${current_year}`)
+	$($('#dynamic-page').find('#calendar-header')).html(`${Object.keys(DAYS_IN_MONTH[current_month])[0]}, ${current_year}`)
 
 	while(index_day <= days_in_month){
-		$('#calendar').append(constructCalendarRow(index_day, start_day, days_in_month, firstRow));
+		$($('#dynamic-page').find('#calendar')).append(constructCalendarRow(index_day, start_day, days_in_month, firstRow));
 		firstRow = false;
 		if(index_day === 1){
 			index_day = index_day + (7 - start_day);
@@ -88,11 +93,11 @@ function constructCalendar(){
 
 	if(current_month === new Date().getMonth()
 		&& current_year === new Date().getFullYear()){
-		$('#calendar-section').find('#next-button').prop('disabled', true);
+		$('#dynamic-page').find('#next-button').prop('disabled', true);
 	}
 	if(month_profile_created === current_month
 		&& year_profile_created === current_year){
-		$('#calendar-section').find('#prev-button').prop('disabled', true);
+		$('#dynamic-page').find('#prev-button').prop('disabled', true);
 	}
 }
 
@@ -124,7 +129,7 @@ function constructCalendarRow(index_day, start_day, days_in_month, firstRow){
 }
 
 function calendarDayListener(){
-	$('#calendar-section').on('click', 'td', function(event){
+	$('#dynamic-page').on('click', 'td', function(event){
 		const calendar_val = $(this).attr('data-day');
 		if(calendar_val){
 			console.log(calendar_val);
@@ -133,7 +138,7 @@ function calendarDayListener(){
 }
 
 function changeMonthListeners() {
-	$('#calendar-section').on('click', '#prev-button', function(event){
+	$('#dynamic-page').on('click', '#prev-button', function(event){
 		new_month = current_month - 1;
 		new_year = current_year;
 		if(new_month < 0){
@@ -148,7 +153,7 @@ function changeMonthListeners() {
 		constructCalendar();
 		addCurrentDay();
 	});
-	$('#calendar-section').on('click', '#next-button', function(event){
+	$('#dynamic-page').on('click', '#next-button', function(event){
 		new_month = current_month + 1;
 		new_year = current_year;
 		if(new_month > 11){
@@ -181,7 +186,15 @@ function clearDisabledButtons(){
 	$($('#dynamic-page').find('#prev-button')).prop('disabled', false);
 }
 
-function main(){
+function reloadCalendar(){
+	adjustCalendarLeapYear(current_year);
+	clearDisabledButtons();
+	constructCalendar();
+
+	addCurrentDay();
+}
+
+function calendarMain(){
 	adjustCalendarLeapYear(current_year);
 	clearDisabledButtons();
 	constructCalendar();
@@ -191,4 +204,4 @@ function main(){
 	createListeners();
 }
 
-$(main());
+$(calendarMain());

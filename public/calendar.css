@@ -3,11 +3,13 @@
 	color: white;
 	padding: 5px;
 	width: 280px;
+	height: 282px;
 	text-align: center;
 	border-radius: 2px;
 	font-family: 'Merriweather', serif;
 	display: inline-block;
 	vertical-align: middle;
+	margin-bottom: 10px;
 }
 
 #calendar-section:hover {

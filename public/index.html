@@ -13,21 +13,14 @@
 			<h1>Personal Reflective Journal</h1>
 		</div>
 		<div id="header-right">
-			<p>About</p>
-			<p>Past Entries</p>
-			<p>New Entry</p>
+			<p id="about-page">About</p>
+			<p id="past-entries-page">Past Entries</p>
+			<p id="new-entry-page">New Entry</p>
 			<p>Login</p>
 		</div>
 	</header>
 	<main>
 		<section id="dynamic-page" class="col-8">
-			<section class="row" id="about-row">
-				<h2>About</h2>
-				<h3>What is 'Personal Reflective Journal'?</h3>
-				<p>The 'Person Reflective Journal' is a personal journal that is accessible to you and you alone. The journal utilizes a series of prompts that can allow you to reflect on the day and explore your emotional or personal state. I believe that reflection is one of the keys to dealing with our own personal struggles and that by writing (or typing) these conflicts can lead to clarity and positivity. While this should never completely substitute actual therapy conducted by a professional, this could certainly be used as a helpful tool for discovering your place in the world.</p>
-				<h3>How does it work?</h3>
-				<p>At the top of your 'Personal Page', you will see a calendar filled in with dates. Previous entries can be accessed through this interface in case you want to go back and read past entries. New entries can be posted through the 'New Entry' link, and can only be posted once per day. Each post consists of a series of required and optional prompts. Click the 'Post' button to create a new entry!</p>
-			</section>
 			<section class="row" id="calendar-row">
 				<h2>Find An Entry</h2>
 				<div id="calendar-section">
@@ -36,24 +29,23 @@
 					<button id="next-button" class="calendar-buttons" disabled="true">Next</button>
 					<table id="calendar"></table>
 				</div>
-				<img id="journal1-pic" src="journal1.jpg">
 			</section>
 			<section class="row" id="entries-row">
 				<h2>Recent Entries</h2>
 				<div class="entry-excerpt">
 					<h3>Date, Entry Title</h3>
 					<p>Summary and stuff that a person would write in and it could be cool I guess.</p>
-					<button id="re-edit-button">Edit</button><button id="re-delete-button">Delete</button>
+					<div role="button" class="re-edit-button">Edit</div><div role="button" class="re-delete-button">Delete</div>
 				</div>
 				<div class="entry-excerpt">
 					<h3>Date, Entry Title</h3>
 					<p>Summary and stuff that a person would write in and it could be cool I guess.</p>
-					<button id="re-edit-button">Edit</button><button id="re-delete-button">Delete</button>
+					<div role="button" class="re-edit-button">Edit</div><div role="button" class="re-delete-button">Delete</div>
 				</div>
 				<div class="entry-excerpt">
 					<h3>Date, Entry Title</h3>
 					<p>Summary and stuff that a person would write in and it could be cool I guess.</p>
-					<button id="re-edit-button">Edit</button><button id="re-delete-button">Delete</button>
+					<div role="button" class="re-edit-button">Edit</div><div role="button" class="re-delete-button">Delete</div>
 				</div>
 				<button>Later Entries</button>
 				<button>Earlier Entries</button>
@@ -67,22 +59,11 @@
 					<p>here is text for this</p>
 				</div>
 			</section>
-			<section id="create-entry-section">
-				<h2>Create An Entry</h2>
-				<form method="post" action="">
-					<fieldset>
-						<legend></legend>
-						<div class="inactive-prompt">
-							<label for="text-prompt-name">Prompt</label>
-							<textarea name="prompt-text-name" class="hidden"></textarea>
-							<button class="hidden">Hide</button>
-						</div>
-					</fieldset>
-				</form>
-			</section>
 		</section>
 	</main>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script type="text/javascript" src="calendar.js"></script>
+	<script type="text/javascript" src="createEntry.js"></script>
+	<script type="text/javascript" src="index.js"></script>
 </body>
 </html>

@@ -12,7 +12,7 @@ body {
 header {
 	background-color: #063852;
 	color: white;
-	padding: 5px;
+	padding: 10px;
 	vertical-align: middle;
 }
 
@@ -28,6 +28,23 @@ header {
 header p {
 	display: inline-block;
 	padding-right: 20px;
+}
+
+header p:hover {
+	font-weight: bold;
+	cursor: pointer;
+}
+
+#about-page {
+	width: 50px;
+}
+
+#past-entries-page {
+	width: 85px;
+}
+
+#new-entry-page {
+	width: 75px;
 }
 
 main {
@@ -55,9 +72,8 @@ main {
 }
 
 #journal1-pic {
-	padding: 20px;
-	width: 150px;
-	vertical-align: middle;
+	height: 292px;
+	vertical-align: top;
 }
 
 #entries-row {
@@ -80,17 +96,75 @@ fieldset {
 textarea {
 	resize: none;
 	width: 80%;
+	min-height: 150px;
+	padding: 5px;
+	border: solid 3px #4CB5F5;
+	border-radius: 2px;
+}
+
+textarea:focus {
+	border: solid 3px #5dff7f;
 }
 
 .inactive-prompt {
 	color: gray;
+	border-radius: 0px 5px 5px 0px;
 }
 
 .inactive-prompt:hover {
-	color: gray;
+	padding-left: 2px;
 	background-color: #5dff7f;
+	cursor: pointer;
 }
 
-.hidden {
-	display: none;
+label {
+	display: block;
+	padding-bottom: 3px;
+	padding-top: 3px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.hide-prompt {
+	color: white;
+	height: 35px;
+	width: 150px;
+	background-color: #F0810F;
+	border: none;
+	border-radius: 2px;
+}
+
+.hide-prompt:hover {
+	background-color: #ef4e0e;
+	cursor: pointer;
+}
+
+.entry-excerpt p {
+	display: inline-block;
+	width: calc(100% - 100px);
+}
+
+.re-edit-button {
+	display: inline-block;
+	width: 50px;
+}
+
+.re-delete-button {
+	display: inline-block;
+	width: 50px;
+}
+
+#submit-entry {
+	margin-top: 25px;
+	color: black;
+	height: 35px;
+	width: 150px;
+	background-color: #4CB5F5;
+	border: none;
+	border-radius: 2px;
+}
+
+#submit-entry:hover {
+	background-color: #5dff7f;
+	cursor: pointer;
 }
