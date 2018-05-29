@@ -2,95 +2,68 @@
 <html>
 <head>
 	<title></title>
+	<link rel="stylesheet" href="calendar.css">
 	<link rel="stylesheet" href="index.css">
+	<link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet">
+	<meta charset="utf-8">
 </head>
 <body>
 	<header>
 		<div id="header-left">
-			<h1>Recipe App</h1>
-			<form action="" method="" id="search-bar">
-				<fieldset>
-					<label for="search-bar"></label>
-					<input type="text" name="search-bar">
-					<button id="search-bar-submit">Search</button>
-				</fieldset>
-			</form>
-			<p>User Name</p>
-			<p>Browse</p>
-			<p>Published</p>
-			<p>Archive</p>
+			<h1>Personal Reflective Journal</h1>
 		</div>
 		<div id="header-right">
-			<p>Settings</p>
+			<p id="about-page">About</p>
+			<p id="past-entries-page">Past Entries</p>
+			<p id="new-entry-page">New Entry</p>
 			<p>Login</p>
 		</div>
 	</header>
 	<main>
-		<div class="col-8">
-			<div class="row">
-				<h2>Showcased Recipes</h2>
-				<div class="little-text">
-					<h3>Title</h3>
-					<h4>Ingredients</h4>
-					<ul>
-						<li>Ingredient 1 and amount</li>
-						<li>Ingredient 2 and amount</li>
-						<li>Ingredient 3 and amount</li>
-					</ul>
-					<h4>Directions</h4>
-					<ol>
-						<li>Step 1</li>
-						<li>Step 2</li>
-						<li>Step 3</li>
-					</ol>
+		<section id="dynamic-page" class="col-8">
+			<section class="row" id="calendar-row">
+				<h2>Find An Entry</h2>
+				<div id="calendar-section">
+					<h3 id="calendar-header"></h3>
+					<button id="prev-button" class="calendar-buttons" disabled="true">Previous</button>
+					<button id="next-button" class="calendar-buttons" disabled="true">Next</button>
+					<table id="calendar"></table>
 				</div>
-			</div>
-		</div>
-		<div class="col-8">
-			<div class="row">
-				<h2>Published Recipes</h2>
-				<div class="published-recipe">
-					<h3>Title</h3>
-					<h4>Ingredients</h4>
-					<ul>
-						<li>Ingredient 1 and amount</li>
-						<li>Ingredient 2 and amount</li>
-						<li>Ingredient 3 and amount</li>
-					</ul>
-					<button id="show-hide-button">Show/Hide</button>
-					<button id="delete-button">Delete</button>
+			</section>
+			<section class="row" id="entries-row">
+				<h2>Recent Entries</h2>
+				<div class="entry-excerpt">
+					<h3>Date, Entry Title</h3>
+					<p>Summary and stuff that a person would write in and it could be cool I guess.</p>
+					<div role="button" class="re-edit-button">Edit</div><div role="button" class="re-delete-button">Delete</div>
 				</div>
-				<div class="published-recipe">
-					<h3>Title</h3>
-					<h4>Ingredients</h4>
-					<ul>
-						<li>Ingredient 1 and amount</li>
-						<li>Ingredient 2 and amount</li>
-						<li>Ingredient 3 and amount</li>
-					</ul>
+				<div class="entry-excerpt">
+					<h3>Date, Entry Title</h3>
+					<p>Summary and stuff that a person would write in and it could be cool I guess.</p>
+					<div role="button" class="re-edit-button">Edit</div><div role="button" class="re-delete-button">Delete</div>
 				</div>
-				<div class="published-recipe">
-					<h3>Title</h3>
-					<h4>Ingredients</h4>
-					<ul>
-						<li>Ingredient 1 and amount</li>
-						<li>Ingredient 2 and amount</li>
-						<li>Ingredient 3 and amount</li>
-					</ul>
+				<div class="entry-excerpt">
+					<h3>Date, Entry Title</h3>
+					<p>Summary and stuff that a person would write in and it could be cool I guess.</p>
+					<div role="button" class="re-edit-button">Edit</div><div role="button" class="re-delete-button">Delete</div>
 				</div>
-			</div>
-		</div>
-		<div class="col-8">
-			<div class="row">
-				<form>
-					<h2>Create New Recipe</h2>
-					<fieldset>
-						
-					</fieldset>
-					<button id="create-button">Create</button>
-				</form>
-			</div>
-		</div>
+				<button>Later Entries</button>
+				<button>Earlier Entries</button>
+				<div>
+					<h2>Selected Entry</h2>
+					<h3>Prompt</h3>
+					<p>here is text for this</p>
+					<h3>Prompt</h3>
+					<p>here is text for this</p>
+					<h3>Prompt</h3>
+					<p>here is text for this</p>
+				</div>
+			</section>
+		</section>
 	</main>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script type="text/javascript" src="calendar.js"></script>
+	<script type="text/javascript" src="createEntry.js"></script>
+	<script type="text/javascript" src="index.js"></script>
 </body>
 </html>
