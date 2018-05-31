@@ -23,6 +23,40 @@ const DAYS_IN_MONTH = [
 const month_profile_created = 3;
 const year_profile_created = 2018;
 
+function getPastEntryDates(){
+	let getDates = new Promise((resolve, reject) => {
+		let entry_dates = recallPastEntries();
+		resolve(entry_dates);
+	});
+
+	getDates
+		.then(entry_dates => {
+			entry_dates = entry_dates.map(stringDate => {
+				dateData = stringDate.split('-');
+
+				pastEntryObj = {
+					month: Number(dateData[0]),
+					date: Number(dateData[1]),
+					year: Number(dateData[2])
+				}
+
+				return pastEntryObj;
+			});
+
+			entry_dates = entry_dates.filter(date => {
+				return date.year === current_year && date.month === current_month && date.date !== current_date;
+			});
+
+			for(let i = 0; i < entry_dates.length; i++){
+				$(`[data-day='${entry_dates[i].date}']`).attr('data-pastEntry-day', true);
+			}
+		});
+}
+
+function recallPastEntries(){
+	return ['3-25-2018', '4-5-2018', '4-8-2018'];
+}
+
 function changeCalendarDate(new_month, new_year){
 	let actual_date = new Date();
 
@@ -146,12 +180,9 @@ function changeMonthListeners() {
 			new_year = current_year - 1;
 		}
 
-		clearDisabledButtons();
-
 		changeCalendarDate(new_month, new_year);
 
-		constructCalendar();
-		addCurrentDay();
+		reloadCalendar();
 	});
 	$('#dynamic-page').on('click', '#next-button', function(event){
 		new_month = current_month + 1;
@@ -160,13 +191,9 @@ function changeMonthListeners() {
 			new_month = 0;
 			new_year = current_year + 1;
 		}
-
-		clearDisabledButtons();
-
 		changeCalendarDate(new_month, new_year);
 
-		constructCalendar();
-		addCurrentDay();
+		reloadCalendar();
 	});
 }
 
@@ -192,14 +219,11 @@ function reloadCalendar(){
 	constructCalendar();
 
 	addCurrentDay();
+	getPastEntryDates();
 }
 
 function calendarMain(){
-	adjustCalendarLeapYear(current_year);
-	clearDisabledButtons();
-	constructCalendar();
-
-	addCurrentDay();
+	reloadCalendar();
 
 	createListeners();
 }

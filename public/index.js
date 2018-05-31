@@ -16,48 +16,7 @@ function aboutSectionListener(){
 
 function pastEntriesSectionListener(){
 	$('#past-entries-page').on('click', function(event){
-		$('#dynamic-page').html(`
-			<section class="row" id="calendar-row">
-				<h2>Find An Entry</h2>
-				<div id="calendar-section">
-					<h3 id="calendar-header"></h3>
-					<button id="prev-button" class="calendar-buttons" disabled="true">Previous</button>
-					<button id="next-button" class="calendar-buttons" disabled="true">Next</button>
-					<table id="calendar"></table>
-				</div>
-			</section>
-			<section class="row" id="entries-row">
-				<h2>Recent Entries</h2>
-				<div class="entry-excerpt">
-					<h3>Date, Entry Title</h3>
-					<p>Summary and stuff that a person would write in and it could be cool I guess.</p>
-					<div role="button" class="re-edit-button">Edit</div><div role="button" class="re-delete-button">Delete</div>
-				</div>
-				<div class="entry-excerpt">
-					<h3>Date, Entry Title</h3>
-					<p>Summary and stuff that a person would write in and it could be cool I guess.</p>
-					<div role="button" class="re-edit-button">Edit</div><div role="button" class="re-delete-button">Delete</div>
-				</div>
-				<div class="entry-excerpt">
-					<h3>Date, Entry Title</h3>
-					<p>Summary and stuff that a person would write in and it could be cool I guess.</p>
-					<div role="button" class="re-edit-button">Edit</div><div role="button" class="re-delete-button">Delete</div>
-				</div>
-				<button>Later Entries</button>
-				<button>Earlier Entries</button>
-				<div>
-					<h2>Selected Entry</h2>
-					<h3>Prompt</h3>
-					<p>here is text for this</p>
-					<h3>Prompt</h3>
-					<p>here is text for this</p>
-					<h3>Prompt</h3>
-					<p>here is text for this</p>
-				</div>
-			</section>
-		`);
-
-		reloadCalendar();
+		loadRecentEntriesPage();
 
 		underlinePageLabel(this);
 	});
@@ -65,26 +24,7 @@ function pastEntriesSectionListener(){
 
 function createNewEntryListener(){
 	$('#new-entry-page').on('click', function(event){
-		$('#dynamic-page').html(`
-			<section id="create-entry-section">
-				<h2>Create An Entry</h2>
-				<form method="post" action="">
-					<fieldset>
-						<legend></legend>
-						<div class="prompt-option">
-							<label for="text-prompt-name" class="prompt-text  inactive-prompt">Prompt</label>
-						</div>
-						<div class="prompt-option">
-							<label for="text-prompt-name" class="prompt-text  inactive-prompt">Prompt</label>
-						</div>
-						<div class="prompt-option">
-							<label for="text-prompt-name" class="prompt-text  inactive-prompt">Prompt</label>
-						</div>
-					</fieldset>
-					<button id="submit-entry">Submit Entry</button>
-				</form>
-			</section>
-		`);
+		loadNewEntryPage();
 
 		underlinePageLabel(this);
 	});
@@ -104,6 +44,7 @@ function createListeners(){
 function main(){
 	createListeners();
 	underlinePageLabel($('#past-entries-page'));
+	loadRecentEntriesPage();
 }
 
 $(main());

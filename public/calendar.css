@@ -67,3 +67,7 @@ td[data-current-day] {
 	font-size: 25px;
 	margin: 5px;
 }
+
+td[data-pastEntry-day]{
+	background-color: #eaeff9;;
+}

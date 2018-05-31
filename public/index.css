@@ -67,15 +67,6 @@ main {
 	padding: 10px;
 }
 
-#calendar-section {
-
-}
-
-#journal1-pic {
-	height: 292px;
-	vertical-align: top;
-}
-
 #entries-row {
 	background-color: #eaeff9;
 	padding: 10px;
@@ -167,4 +158,14 @@ label {
 #submit-entry:hover {
 	background-color: #5dff7f;
 	cursor: pointer;
+}
+
+#emotions-fieldset label{
+	display: inline-block;
+	margin-right: 10px;
+}
+
+#emotions-fieldset input{
+	display: inline-block;
+	margin-right: 40px;
 }
