@@ -46,7 +46,7 @@ describe('Post New Entry', function(){
 	it('a new entry should be posted to the server and database', function(){
 		const newEntry1 = generateRandomEntry();
 		return chai.request(app)
-			.post('/entries')
+			.post('/entries/test')
 			.set('Accept','application/json')
 			.send(newEntry1)
 			.then(function(res){
