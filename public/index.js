@@ -43,7 +43,6 @@ function loadRecentEntries(){
 	}
 
 	$.getJSON('/entries/monthly', query, function(data){
-		console.log(data);
 		RecentEntries.splice(0, RecentEntries.length);
 
 		for(let i = 0; i < data.entries.length; i++){

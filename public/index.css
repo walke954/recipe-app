@@ -130,11 +130,6 @@ label {
 	cursor: pointer;
 }
 
-.entry-excerpt p {
-	display: inline-block;
-	width: calc(100% - 100px);
-}
-
 .re-edit-button {
 	display: inline-block;
 	width: 50px;

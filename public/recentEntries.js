@@ -68,26 +68,52 @@ function getPastEntryList(){
 		}
 	}
 
-	$('#entries-row').html(element);
-}
-
-// <div id="selected-entry">
-// 	<h2>Selected Entry</h2>
-// 	<h3>Prompt</h3>
-// 	<p>here is text for this</p>
-// 	<h3>Prompt</h3>
-// 	<p>here is text for this</p>
-// 	<h3>Prompt</h3>
-// 	<p>here is text for this</p>
-// 	<button class="re-edit-button">Edit</button><button class="re-delete-button">Delete</button>
-// </div>
-
-function noEntriesElement(){
-	return `
-		<p>You don't have any entries yet!</p>
+	element = element.concat(`
 		<div id="selected-entry">
 			<h2>Selected Entry</h2>
 			<p>No entry selected.</p> 
 		</div>
+	`);
+
+	$('#entries-row').html(element);
+}
+
+function noEntriesElement(){
+	return `
+		<p>You don't have any entries this month!</p>
 	`;
 }
+
+function showSelectedEntry(entry){
+	let element = `
+		<h2>${Object.keys(DAYS_IN_MONTH[entry.month])} ${entry.date}, ${entry.year}</h2>
+		<h3>My Emotional State:</h3>
+		<p>Today I felt <b>${entry.daily_emotion}</b>...</p>
+		<p>${entry.emotion_summary}</p>
+	`;
+
+	for(let i = 0; i < entry.optional_prompts.length; i++){
+		element = element.concat(`
+			<h3>${entry.optional_prompts[i].prompt}</h3>
+			<p>${entry.optional_prompts[i].answer}</p>
+		`);
+	}
+	$('#selected-entry').html(element);
+}
+
+function selectedEntryListener(){
+	$('#dynamic-page').on('click', '.entry-excerpt', function(event){
+		const entry = RecentEntries[$(this).index() - 1];
+
+		showSelectedEntry(entry);
+
+		const y = $('#selected-entry').position();
+		$('HTML, BODY').animate({scrollTop: y.top});
+	});
+}
+
+function createListeners(){
+	selectedEntryListener();
+}
+
+$(createListeners());

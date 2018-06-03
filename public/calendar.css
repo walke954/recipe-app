@@ -32,13 +32,18 @@ td:hover {
 	cursor: default;
 }
 
-td[data-day]:hover {
+td[data-pastEntry-day]:hover {
 	background-color: #5dff7f;
 	cursor: pointer;
 }
 
 td[data-current-day] {
 	background-color: #DFE166;
+}
+
+td[data-current-day]:hover {
+	background-color: #5dff7f;
+	cursor: pointer;
 }
 
 .calendar-buttons {

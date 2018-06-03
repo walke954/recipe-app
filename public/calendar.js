@@ -9,13 +9,17 @@ const month_profile_created = 3;
 const year_profile_created = 2018;
 
 function getPastEntryDates(){
+	let counter = 0;
+
 	for(let i = 0; i < RecentEntries.length; i++){
 		const entry_date = RecentEntries[i].date;
 		if(entry_date != current_date || current_month != new Date().getMonth() || 
 			current_year != new Date().getFullYear()){
 
-			$(`[data-day='${entry_date}']`).attr('data-pastEntry-day', true);
+			$(`[data-day='${entry_date}']`).attr('data-pastEntry-day', counter);
 		}
+
+		counter++;
 	}
 }
 
@@ -126,10 +130,14 @@ function constructCalendarRow(index_day, start_day, days_in_month, firstRow){
 
 function calendarDayListener(){
 	$('#dynamic-page').on('click', 'td', function(event){
-		const calendar_val = $(this).attr('data-day');
-		if(calendar_val){
-			console.log(calendar_val);
-		}
+		const calendar_val = $(this).attr('data-pastEntry-day');
+		
+		const selectedEntry = RecentEntries[calendar_val];
+
+		showSelectedEntry(selectedEntry);
+
+		const y = $('#selected-entry').position();
+		$('HTML, BODY').animate({scrollTop: y.top});
 	});
 }
 
