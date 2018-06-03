@@ -171,7 +171,7 @@ describe('Test Rest API', function(){
 		});
 	});
 
-	describe('Get all entries for a given month', function(){
+	describe('GET Month Entries', function(){
 		it('should get every entry for a given month', function(){
 			const query = `?month=${Math.floor(Math.random() * (new Date().getMonth() + 1))}&year=2018`;
 
@@ -202,8 +202,28 @@ describe('Test Rest API', function(){
 					expect(entry.emotion_summary).to.equal(resEntry.emotion_summary);
 
 					if(entry.optional_prompts.length > 0){
-						expect(entry.optional_prompts).to.contain(resEntry.optional_prompts.prompt);
-						expect(entry.optional_prompts).to.contain(resEntry.optional_prompts.answer);
+						expect(entry.optional_prompts[0]).to.contain(resEntry.optional_prompts[0].prompt);
+						expect(entry.optional_prompts[0]).to.contain(resEntry.optional_prompts[0].answer);
+					}
+				});
+		});
+	});
+
+	describe('GET Prompts', function(){
+		it('GET and compare all the prompts saved in entryModels.js with what is returned', function(){
+			let resEntry;
+			return chai.request(app)
+				.get('/entries/prompts')
+				.set('Accept','application/json')
+				.then(function(res){
+					expect(res).to.have.status(200);
+					expect(res.body.prompts).to.be.a('array');
+
+					for(let i = 0; i < res.body.prompts.length; i++){
+						const prompt = res.body.prompts[i].prompt;
+
+						expect(prompt).to.equal(Prompts[i].prompt);
+						expect(i).to.equal(Prompts[i].id);
 					}
 				});
 		});
