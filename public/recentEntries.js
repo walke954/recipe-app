@@ -10,49 +10,65 @@ function loadRecentEntriesPage(){
 				</div>
 			</section>
 			<section class="row" id="entries-row">
-				<h2>Recent Entries</h2>
+				<p>Loading entries...</p>
+			</section>
 	`;
 
-	const loadEntries = new Promise((resolve, reject) => {
-		let past_entries = getPastEntries();
-		resolve(past_entries);
-	});
+	// if(past_entries.length === 0){
+	// 	element = noEntriesElement(element);
+	// }
+	// else{
+	// 	for(let i = 0; i < past_entries.length; i++){
+	// 		element = element.concat(`
+	// 			<div class="entry-excerpt">
+	// 				<h3>Date, Entry Title</h3>
+	// 				<p>Summary and stuff that a person would write in and it could be cool I guess.</p>
+	// 				<button class="select-button">Select</button>
+	// 			</div>
+	// 		`);
+	// 	}
 
-	loadEntries
-		.then(past_entries => {
-			if(past_entries.length === 0){
-				element = noEntriesElement(element);
-			}
-			else{
-				for(let i = 0; i < past_entries.length; i++){
-					element = element.concat(`
-						<div class="entry-excerpt">
-							<h3>Date, Entry Title</h3>
-							<p>Summary and stuff that a person would write in and it could be cool I guess.</p>
-							<button class="select-button">Select</button>
-						</div>
-					`);
-				}
+	// 	element = element.concat(`
+	// 			<button>Later Entries</button>
+	// 			<button>Earlier Entries</button>
+	// 			<div id="selected-entry">
+	// 				<h2>Selected Entry</h2>
+	// 				<p>No entry selected.</p> 
+	// 			</div>
+	// 		</section>
+	// 	`);
+	// }
 
-				element = element.concat(`
-						<button>Later Entries</button>
-						<button>Earlier Entries</button>
-						<div id="selected-entry">
-							<h2>Selected Entry</h2>
-							<p>No entry selected.</p> 
-						</div>
-					</section>
-				`);
-			}
+	$('#dynamic-page').html(element);
 
-			$('#dynamic-page').html(element);
+	reloadCalendar();
 
-			reloadCalendar();
-		});
+
 }
 
-function getPastEntries(){
-	return [];
+function getPastEntryList(){
+	let element = `
+		<h2>Recent Entries</h2>
+	`
+
+	if(RecentEntries.length === 0){
+		element = element.concat(noEntriesElement());
+	}
+	else{
+		for(let i = 0; i < RecentEntries.length; i++){
+			const entry = RecentEntries[i];
+			element = element.concat(`
+				<div class="entry-excerpt">
+					<h3>${Object.keys(DAYS_IN_MONTH[entry.month])} ${entry.date}, ${entry.year}</h3>
+					<p>Today I felt <b>${entry.daily_emotion}</b>...</p>
+					<p>${entry.emotion_summary}</p>
+					<button class="select-button">Select</button>
+				</div>
+			`);
+		}
+	}
+
+	$('#entries-row').html(element);
 }
 
 // <div id="selected-entry">
@@ -66,13 +82,12 @@ function getPastEntries(){
 // 	<button class="re-edit-button">Edit</button><button class="re-delete-button">Delete</button>
 // </div>
 
-function noEntriesElement(element){
-	return element.concat(`
-			<p>You don't have any entries yet!</p>
-			<div id="selected-entry">
-				<h2>Selected Entry</h2>
-				<p>No entry selected.</p> 
-			</div>
-		</section>
-	`);
+function noEntriesElement(){
+	return `
+		<p>You don't have any entries yet!</p>
+		<div id="selected-entry">
+			<h2>Selected Entry</h2>
+			<p>No entry selected.</p> 
+		</div>
+	`;
 }

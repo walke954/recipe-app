@@ -5,56 +5,18 @@ let current_month = date.getMonth();
 let current_date = date.getDate();
 let current_day = date.getDay();
 
-const DAYS_IN_MONTH = [
-						{January: 31},
-						{February: 28},
-						{March: 31},
-						{April: 30},
-						{May: 31},
-						{June: 30},
-						{July: 31},
-						{August: 31},
-						{September: 30},
-						{October: 31},
-						{November: 30},
-						{December: 31}
-					];
-
 const month_profile_created = 3;
 const year_profile_created = 2018;
 
 function getPastEntryDates(){
-	let getDates = new Promise((resolve, reject) => {
-		let entry_dates = recallPastEntries();
-		resolve(entry_dates);
-	});
+	for(let i = 0; i < RecentEntries.length; i++){
+		const entry_date = RecentEntries[i].date;
+		if(entry_date != current_date || current_month != new Date().getMonth() || 
+			current_year != new Date().getFullYear()){
 
-	getDates
-		.then(entry_dates => {
-			entry_dates = entry_dates.map(stringDate => {
-				dateData = stringDate.split('-');
-
-				pastEntryObj = {
-					month: Number(dateData[0]),
-					date: Number(dateData[1]),
-					year: Number(dateData[2])
-				}
-
-				return pastEntryObj;
-			});
-
-			entry_dates = entry_dates.filter(date => {
-				return date.year === current_year && date.month === current_month && date.date !== current_date;
-			});
-
-			for(let i = 0; i < entry_dates.length; i++){
-				$(`[data-day='${entry_dates[i].date}']`).attr('data-pastEntry-day', true);
-			}
-		});
-}
-
-function recallPastEntries(){
-	return ['3-25-2018', '4-5-2018', '4-8-2018'];
+			$(`[data-day='${entry_date}']`).attr('data-pastEntry-day', true);
+		}
+	}
 }
 
 function changeCalendarDate(new_month, new_year){
@@ -182,6 +144,8 @@ function changeMonthListeners() {
 
 		changeCalendarDate(new_month, new_year);
 
+		loadRecentEntries();
+
 		reloadCalendar();
 	});
 	$('#dynamic-page').on('click', '#next-button', function(event){
@@ -192,6 +156,8 @@ function changeMonthListeners() {
 			new_year = current_year + 1;
 		}
 		changeCalendarDate(new_month, new_year);
+
+		loadRecentEntries();
 
 		reloadCalendar();
 	});
@@ -219,7 +185,6 @@ function reloadCalendar(){
 	constructCalendar();
 
 	addCurrentDay();
-	getPastEntryDates();
 }
 
 function calendarMain(){

@@ -17,8 +17,9 @@ function aboutSectionListener(){
 function pastEntriesSectionListener(){
 	$('#past-entries-page').on('click', function(event){
 		loadRecentEntriesPage();
+		underlinePageLabel($('#past-entries-page'));
 
-		underlinePageLabel(this);
+		loadRecentEntries();
 	});
 }
 
@@ -35,6 +36,25 @@ function underlinePageLabel(pageLabel){
 	$(pageLabel).css('text-decoration', 'underline');
 }
 
+function loadRecentEntries(){
+	const query = {
+		month: current_month,
+		year: current_year
+	}
+
+	$.getJSON('/entries/monthly', query, function(data){
+		console.log(data);
+		RecentEntries.splice(0, RecentEntries.length);
+
+		for(let i = 0; i < data.entries.length; i++){
+			RecentEntries.push(data.entries[i]);
+		}
+
+		getPastEntryDates();
+		getPastEntryList();
+	});
+}
+
 function createListeners(){
 	aboutSectionListener();
 	pastEntriesSectionListener();
@@ -43,8 +63,16 @@ function createListeners(){
 
 function main(){
 	createListeners();
-	underlinePageLabel($('#past-entries-page'));
-	loadRecentEntriesPage();
+
+	$.getJSON('/entries/prompts', function(data){
+		for(let i = 0; i < data.prompts.length; i++){
+			prompts.push(data.prompts[i]);
+		}
+
+		loadRecentEntriesPage();
+		underlinePageLabel($('#past-entries-page'));
+		loadRecentEntries();
+	});
 }
 
 $(main());

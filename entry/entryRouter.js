@@ -50,8 +50,6 @@ const checkNewEntryBody = [
 router.post('/', jsonParser, checkNewEntryBody, (req, res) => {
 	const errors = validationResult(req);
 
-	console.log(req.body);
-
 	if (!errors.isEmpty()) {
 		return res.status(422).json({errors: errors.mapped()});
 	}
@@ -129,7 +127,9 @@ router.post('/test', jsonParser, checkNewEntryBody, (req, res) => {
 
 	Entry
 		.create({
-			date: `${current_month}-${current_date}-${current_year}`,
+			date: current_date,
+			month: current_month,
+			year: current_year,
 			daily_emotion: req.body['daily-emotion'],
 			emotion_summary: req.body['emotion-summary'],
 			optional_prompts: optional_prompts_array
@@ -143,7 +143,7 @@ router.post('/test', jsonParser, checkNewEntryBody, (req, res) => {
 		});
 });
 
-router.delete('/delete/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
 	Entry
 		.findByIdAndRemove(req.params.id)
 		.then(entry => res.send(204).end())

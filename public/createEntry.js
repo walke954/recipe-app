@@ -1,4 +1,4 @@
-let prompts = [];
+const prompts = [];
 
 function loadNewEntryPage(){
 	let newEntryElement = '';
@@ -31,43 +31,22 @@ function loadNewEntryPage(){
 					<legend></legend>
 	`);
 
-	const loadPrompts = new Promise((resolve, reject) => {
-		let prompt_options = getPromptsFromServer();
-		resolve(prompt_options);
-	});
+	for(let i = 0; i < prompts.length; i++){
+		newEntryElement = newEntryElement.concat(`
+			<div class="prompt-option">
+				<label for="text-prompt-${prompts[i].id}" class="prompt-text  inactive-prompt">${prompts[i].prompt}</label>
+			</div>
+		`);
+	}
 
-	loadPrompts
-		.then(prompt_options => {
-			prompts = prompt_options;
+	newEntryElement = newEntryElement.concat(`
+				</fieldset>
+				<button id="submit-entry">Submit Entry</button>
+			</form>
+		</section>
+	`);
 
-			for(let i = 0; i < prompt_options.length; i++){
-				newEntryElement = newEntryElement.concat(`
-					<div class="prompt-option">
-						<label for="text-prompt-${prompts[i].id}" class="prompt-text  inactive-prompt">${prompts[i].prompt}</label>
-					</div>
-				`);
-			}
-
-			newEntryElement = newEntryElement.concat(`
-						</fieldset>
-						<button id="submit-entry">Submit Entry</button>
-					</form>
-				</section>
-			`);
-
-			$('#dynamic-page').html(newEntryElement);
-		});
-}
-
-function getPromptsFromServer(){
-	const prompt_options = [
-		{prompt: 'What other kinds of emotions did you feel today?', id: 0},
-		{prompt: 'What was the most important thing that happened to you today?', id: 1},
-		{prompt: 'Can you recall a time today when you helped someone who needed it?', id: 2},
-		{prompt: 'Do you have any other thoughts for the day?', id: 3}
-	]
-
-	return prompt_options;
+	$('#dynamic-page').html(newEntryElement);
 }
 
 function promptEnableListener(){
