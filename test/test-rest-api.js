@@ -200,11 +200,6 @@ describe('Test Rest API', function(){
 					expect(entry.id).to.equal(resEntry.id);
 					expect(entry.daily_emotion).to.equal(resEntry.daily_emotion);
 					expect(entry.emotion_summary).to.equal(resEntry.emotion_summary);
-
-					if(entry.optional_prompts.length > 0){
-						expect(entry.optional_prompts[0]).to.contain(resEntry.optional_prompts[0].prompt);
-						expect(entry.optional_prompts[0]).to.contain(resEntry.optional_prompts[0].answer);
-					}
 				});
 		});
 	});
@@ -225,6 +220,25 @@ describe('Test Rest API', function(){
 						expect(prompt).to.equal(Prompts[i].prompt);
 						expect(i).to.equal(Prompts[i].id);
 					}
+				});
+		});
+	});
+
+	describe('DELETE Entry', function(){
+		let entry;
+		it('should delete an entry based off of an id', function(){
+			return Entry
+				.findOne()
+				.then(function(entryToDelete){
+					entry = entryToDelete;
+					return chai.request(app).delete('/entries/' + entry.id)
+				})
+				.then(function(res){
+					expect(res).to.have.status(204);
+					return Entry.findById(entry.id);
+				})
+				.then(function(entryToDelete){
+					expect(entryToDelete).to.be.null;
 				});
 		});
 	});

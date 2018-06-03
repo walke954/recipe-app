@@ -41,9 +41,12 @@ td[data-current-day] {
 	background-color: #DFE166;
 }
 
-td[data-current-day]:hover {
-	background-color: #5dff7f;
-	cursor: pointer;
+td[data-pastEntry-day]{
+	background-color: #eaeff9;
+}
+
+td[data-current-day][data-pastEntry-day] {
+	background-color: #DFE166;
 }
 
 .calendar-buttons {
@@ -63,6 +66,10 @@ td[data-current-day]:hover {
 	cursor: pointer;
 }
 
+td[data-current-day][data-pastEntry-day]:hover {
+	background-color: #5dff7f;
+}
+
 .calendar-buttons:disabled {
 	background-color: grey;
 	cursor: default;
@@ -71,8 +78,4 @@ td[data-current-day]:hover {
 #calendar-header {
 	font-size: 25px;
 	margin: 5px;
-}
-
-td[data-pastEntry-day]{
-	background-color: #eaeff9;
 }

@@ -1,3 +1,5 @@
+let selected_entry;
+
 function loadRecentEntriesPage(){
 	let element = `
 			<section class="row" id="calendar-row">
@@ -62,7 +64,6 @@ function getPastEntryList(){
 					<h3>${Object.keys(DAYS_IN_MONTH[entry.month])} ${entry.date}, ${entry.year}</h3>
 					<p>Today I felt <b>${entry.daily_emotion}</b>...</p>
 					<p>${entry.emotion_summary}</p>
-					<button class="select-button">Select</button>
 				</div>
 			`);
 		}
@@ -85,6 +86,8 @@ function noEntriesElement(){
 }
 
 function showSelectedEntry(entry){
+	selected_entry = entry;
+
 	let element = `
 		<h2>${Object.keys(DAYS_IN_MONTH[entry.month])} ${entry.date}, ${entry.year}</h2>
 		<h3>My Emotional State:</h3>
@@ -98,7 +101,33 @@ function showSelectedEntry(entry){
 			<p>${entry.optional_prompts[i].answer}</p>
 		`);
 	}
+
+	element = element.concat(`
+		<button id="edit-button">Edit</button>
+		<button id="delete-button">Delete</button>
+	`);
+
 	$('#selected-entry').html(element);
+}
+
+function editEntryListener(){
+
+}
+
+function deleteEntryListener(){
+	$('#dynamic-page').on('click', '#delete-button', function(event){
+		$.ajax({
+			url: '/entries/' + selected_entry.id,
+			type: 'DELETE',
+			success: function(){
+				loadRecentEntriesPage();
+				underlinePageLabel($('#past-entries-page'));
+
+				loadRecentEntries();
+				$('HTML, BODY').animate({scrollTop: 0});
+			}
+		});
+	});
 }
 
 function selectedEntryListener(){
@@ -114,6 +143,8 @@ function selectedEntryListener(){
 
 function createListeners(){
 	selectedEntryListener();
+	editEntryListener();
+	deleteEntryListener();
 }
 
 $(createListeners());

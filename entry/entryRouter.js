@@ -144,9 +144,10 @@ router.post('/test', jsonParser, checkNewEntryBody, (req, res) => {
 });
 
 router.delete('/:id', (req, res) => {
+	console.log(req.params);
 	Entry
 		.findByIdAndRemove(req.params.id)
-		.then(entry => res.send(204).end())
+		.then(entry => res.status(204).end())
 		.catch(err => {
 			console.log(err);
 			res.status(500).json({message: 'Internal Server Error'});

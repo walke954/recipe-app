@@ -13,11 +13,7 @@ function getPastEntryDates(){
 
 	for(let i = 0; i < RecentEntries.length; i++){
 		const entry_date = RecentEntries[i].date;
-		if(entry_date != current_date || current_month != new Date().getMonth() || 
-			current_year != new Date().getFullYear()){
-
-			$(`[data-day='${entry_date}']`).attr('data-pastEntry-day', counter);
-		}
+		$(`[data-day='${entry_date}']`).attr('data-pastEntry-day', counter);
 
 		counter++;
 	}
@@ -132,12 +128,14 @@ function calendarDayListener(){
 	$('#dynamic-page').on('click', 'td', function(event){
 		const calendar_val = $(this).attr('data-pastEntry-day');
 		
-		const selectedEntry = RecentEntries[calendar_val];
+		if(calendar_val){
+			const selectedEntry = RecentEntries[calendar_val];
 
-		showSelectedEntry(selectedEntry);
+			showSelectedEntry(selectedEntry);
 
-		const y = $('#selected-entry').position();
-		$('HTML, BODY').animate({scrollTop: y.top});
+			const y = $('#selected-entry').position();
+			$('HTML, BODY').animate({scrollTop: y.top});
+		}
 	});
 }
 
