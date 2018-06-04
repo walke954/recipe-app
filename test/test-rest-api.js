@@ -242,4 +242,36 @@ describe('Test Rest API', function(){
 				});
 		});
 	});
+
+	describe('PUT Old Entry', function(){
+		it('should modify an existing entry', function(){
+			const updateFields = {
+				emotion_summary: 'hohohhohohohoho',
+				'text-prompt-1': 'ojojojojojojojoj',
+				'text-prompt-2': 'dmdmmdmdmdmdmmd'
+			}
+
+			return Entry
+				.findOne()
+				.then(function(entry){
+					updateFields.id = entry.id;
+
+					return chai.request(app).put('/entries/' + entry.id)
+						.send(updateFields)
+						.set('Accept','application/json')
+						.then(function(res){
+							expect(res).to.have.status(204);
+
+							return Entry.findById(updateFields.id);
+						})
+						.then(function(entry){
+							expect(entry.emotion_summary).to.equal(updateFields.emotion_summary);
+							expect(entry.optional_prompts[0].prompt).to.equal(Prompts[1].prompt);
+							expect(entry.optional_prompts[0].answer).to.equal(updateFields['text-prompt-1']);
+							expect(entry.optional_prompts[1].prompt).to.equal(Prompts[2].prompt);
+							expect(entry.optional_prompts[1].answer).to.equal(updateFields['text-prompt-2']);
+						});
+				})
+		});
+	});
 });

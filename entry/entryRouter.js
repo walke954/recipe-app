@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 const {Entry, Prompts} = require('./entryModels');
 
-const {check, body, query, validationResult} = require('express-validator/check');
+const {param, body, query, validationResult} = require('express-validator/check');
 const {sanitizeBody} = require('express-validator/filter');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
@@ -95,6 +95,7 @@ router.post('/', jsonParser, checkNewEntryBody, (req, res) => {
 		});
 });
 
+// router for testing, nearly identical except instead of refreshing the page it returns a json object containing the newly created entry
 router.post('/test', jsonParser, checkNewEntryBody, (req, res) => {
 	const errors = validationResult(req);
 
@@ -144,9 +145,53 @@ router.post('/test', jsonParser, checkNewEntryBody, (req, res) => {
 });
 
 router.delete('/:id', (req, res) => {
-	console.log(req.params);
 	Entry
 		.findByIdAndRemove(req.params.id)
+		.then(entry => res.status(204).end())
+		.catch(err => {
+			console.log(err);
+			res.status(500).json({message: 'Internal Server Error'});
+		});
+});
+
+const checkUpdateEntryBody = [
+	param('id', `parameter 'id' does not exist`).exists()
+];
+
+router.put('/:id', jsonParser, checkUpdateEntryBody, (req, res) => {
+	const errors = validationResult(req);
+
+	if (!errors.isEmpty()) {
+		return res.status(422).json({errors: errors.mapped()});
+	}
+
+	const bodyData = req.body;
+
+	// replace optional_prompts with new data
+	const newData = [];
+
+	const keys = Object.keys(req.body);
+	const values = Object.values(req.body);
+
+	for(let i = 0; i < keys.length; i++){
+		const key = keys[i];
+		if(key.search('text-prompt') >= 0){
+			const id = key.split('-')[2];
+
+			newData.push({
+				prompt: Prompts[id].prompt,
+				answer: values[i]
+			});
+
+			delete bodyData[key];
+		}
+	}
+
+	bodyData['optional_prompts'] = newData;
+
+	Entry
+		.findById(req.params.id)
+		.update(bodyData)
 		.then(entry => res.status(204).end())
 		.catch(err => {
 			console.log(err);
