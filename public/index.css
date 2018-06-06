@@ -6,7 +6,7 @@
 }
 
 body {
-	background-color: black;
+	background-color: #99ffb3;
 }
 
 header {
@@ -58,13 +58,20 @@ main {
 }
 
 #calendar-row {
-	color: white;
+	color: black;
 	text-align: center;
 	padding: 20px;
 }
 
 #calendar-row h2 {
 	padding: 10px;
+}
+
+#selected-row {
+	background-color: #eaeff9;
+	padding: 10px;
+	border-radius: 2px;
+	margin-bottom: 10px;
 }
 
 #entries-row {

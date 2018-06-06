@@ -1,13 +1,3 @@
-let date = new Date();
-
-let current_year = date.getFullYear();
-let current_month = date.getMonth();
-let current_date = date.getDate();
-let current_day = date.getDay();
-
-const month_profile_created = 3;
-const year_profile_created = 2018;
-
 function getPastEntryDates(){
 	let counter = 0;
 
@@ -63,7 +53,7 @@ function constructCalendar(){
 	let firstRow = true;
 
 
-	$($('#dynamic-page').find('#calendar')).html(
+	$($('main').find('#calendar')).html(
 					`<tr>
 						<td class="day">Sun</td>
 						<td class="day">Mon</td>
@@ -74,10 +64,10 @@ function constructCalendar(){
 						<td class="day">Sat</td>
 					</tr>`);
 
-	$($('#dynamic-page').find('#calendar-header')).html(`${Object.keys(DAYS_IN_MONTH[current_month])[0]}, ${current_year}`)
+	$($('main').find('#calendar-header')).html(`${Object.keys(DAYS_IN_MONTH[current_month])[0]}, ${current_year}`)
 
 	while(index_day <= days_in_month){
-		$($('#dynamic-page').find('#calendar')).append(constructCalendarRow(index_day, start_day, days_in_month, firstRow));
+		$($('main').find('#calendar')).append(constructCalendarRow(index_day, start_day, days_in_month, firstRow));
 		firstRow = false;
 		if(index_day === 1){
 			index_day = index_day + (7 - start_day);
@@ -89,11 +79,11 @@ function constructCalendar(){
 
 	if(current_month === new Date().getMonth()
 		&& current_year === new Date().getFullYear()){
-		$('#dynamic-page').find('#next-button').prop('disabled', true);
+		$('main').find('#next-button').prop('disabled', true);
 	}
 	if(month_profile_created === current_month
 		&& year_profile_created === current_year){
-		$('#dynamic-page').find('#prev-button').prop('disabled', true);
+		$('main').find('#prev-button').prop('disabled', true);
 	}
 }
 
@@ -125,7 +115,7 @@ function constructCalendarRow(index_day, start_day, days_in_month, firstRow){
 }
 
 function calendarDayListener(){
-	$('#dynamic-page').on('click', 'td', function(event){
+	$('main').on('click', 'td', function(event){
 		const calendar_val = $(this).attr('data-pastEntry-day');
 		
 		if(calendar_val){
@@ -133,14 +123,14 @@ function calendarDayListener(){
 
 			showSelectedEntry(selectedEntry);
 
-			const y = $('#selected-entry').position();
-			$('HTML, BODY').animate({scrollTop: y.top});
+			// const y = $('#selected-entry').position();
+			// $('HTML, BODY').animate({scrollTop: y.top});
 		}
 	});
 }
 
 function changeMonthListeners() {
-	$('#dynamic-page').on('click', '#prev-button', function(event){
+	$('main').on('click', '#prev-button', function(event){
 		new_month = current_month - 1;
 		new_year = current_year;
 		if(new_month < 0){
@@ -154,7 +144,7 @@ function changeMonthListeners() {
 
 		reloadCalendar();
 	});
-	$('#dynamic-page').on('click', '#next-button', function(event){
+	$('main').on('click', '#next-button', function(event){
 		new_month = current_month + 1;
 		new_year = current_year;
 		if(new_month > 11){
@@ -181,8 +171,8 @@ function createListeners(){
 }
 
 function clearDisabledButtons(){
-	$($('#dynamic-page').find('#next-button')).prop('disabled', false);
-	$($('#dynamic-page').find('#prev-button')).prop('disabled', false);
+	$($('main').find('#next-button')).prop('disabled', false);
+	$($('main').find('#prev-button')).prop('disabled', false);
 }
 
 function reloadCalendar(){
