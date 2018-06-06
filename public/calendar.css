@@ -32,12 +32,20 @@ td:hover {
 	cursor: default;
 }
 
-td[data-day]:hover {
+td[data-pastEntry-day]:hover {
 	background-color: #5dff7f;
 	cursor: pointer;
 }
 
 td[data-current-day] {
+	background-color: #DFE166;
+}
+
+td[data-pastEntry-day]{
+	background-color: #eaeff9;
+}
+
+td[data-current-day][data-pastEntry-day] {
 	background-color: #DFE166;
 }
 
@@ -56,6 +64,10 @@ td[data-current-day] {
 .calendar-buttons:hover {
 	background-color: #ef4e0e;
 	cursor: pointer;
+}
+
+td[data-current-day][data-pastEntry-day]:hover {
+	background-color: #5dff7f;
 }
 
 .calendar-buttons:disabled {

@@ -5,23 +5,19 @@ let current_month = date.getMonth();
 let current_date = date.getDate();
 let current_day = date.getDay();
 
-const DAYS_IN_MONTH = [
-						{January: 31},
-						{February: 28},
-						{March: 31},
-						{April: 30},
-						{May: 31},
-						{June: 30},
-						{July: 31},
-						{August: 31},
-						{September: 30},
-						{October: 31},
-						{November: 30},
-						{December: 31}
-					];
-
 const month_profile_created = 3;
 const year_profile_created = 2018;
+
+function getPastEntryDates(){
+	let counter = 0;
+
+	for(let i = 0; i < RecentEntries.length; i++){
+		const entry_date = RecentEntries[i].date;
+		$(`[data-day='${entry_date}']`).attr('data-pastEntry-day', counter);
+
+		counter++;
+	}
+}
 
 function changeCalendarDate(new_month, new_year){
 	let actual_date = new Date();
@@ -130,9 +126,15 @@ function constructCalendarRow(index_day, start_day, days_in_month, firstRow){
 
 function calendarDayListener(){
 	$('#dynamic-page').on('click', 'td', function(event){
-		const calendar_val = $(this).attr('data-day');
+		const calendar_val = $(this).attr('data-pastEntry-day');
+		
 		if(calendar_val){
-			console.log(calendar_val);
+			const selectedEntry = RecentEntries[calendar_val];
+
+			showSelectedEntry(selectedEntry);
+
+			const y = $('#selected-entry').position();
+			$('HTML, BODY').animate({scrollTop: y.top});
 		}
 	});
 }
@@ -146,12 +148,11 @@ function changeMonthListeners() {
 			new_year = current_year - 1;
 		}
 
-		clearDisabledButtons();
-
 		changeCalendarDate(new_month, new_year);
 
-		constructCalendar();
-		addCurrentDay();
+		loadRecentEntries();
+
+		reloadCalendar();
 	});
 	$('#dynamic-page').on('click', '#next-button', function(event){
 		new_month = current_month + 1;
@@ -160,13 +161,11 @@ function changeMonthListeners() {
 			new_month = 0;
 			new_year = current_year + 1;
 		}
-
-		clearDisabledButtons();
-
 		changeCalendarDate(new_month, new_year);
 
-		constructCalendar();
-		addCurrentDay();
+		loadRecentEntries();
+
+		reloadCalendar();
 	});
 }
 
@@ -195,11 +194,7 @@ function reloadCalendar(){
 }
 
 function calendarMain(){
-	adjustCalendarLeapYear(current_year);
-	clearDisabledButtons();
-	constructCalendar();
-
-	addCurrentDay();
+	reloadCalendar();
 
 	createListeners();
 }
