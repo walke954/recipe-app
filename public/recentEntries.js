@@ -2,6 +2,7 @@ let selected_entry;
 
 function loadRecentEntriesPage(){
 	let element = `
+		<section class="col-8" id="selected">
 			<section class="row" id="calendar-row">
 				<h2>Find An Entry</h2>
 				<div id="calendar-section">
@@ -11,41 +12,20 @@ function loadRecentEntriesPage(){
 					<table id="calendar"></table>
 				</div>
 			</section>
+			<section class="row" id="selected-row">
+				<section class="row" id="selected-entry"></section>
+			</section>
+		</section>
+		<section class="col-4" id="past-entries">
 			<section class="row" id="entries-row">
 				<p>Loading entries...</p>
 			</section>
+		</section>
 	`;
 
-	// if(past_entries.length === 0){
-	// 	element = noEntriesElement(element);
-	// }
-	// else{
-	// 	for(let i = 0; i < past_entries.length; i++){
-	// 		element = element.concat(`
-	// 			<div class="entry-excerpt">
-	// 				<h3>Date, Entry Title</h3>
-	// 				<p>Summary and stuff that a person would write in and it could be cool I guess.</p>
-	// 				<button class="select-button">Select</button>
-	// 			</div>
-	// 		`);
-	// 	}
-
-	// 	element = element.concat(`
-	// 			<button>Later Entries</button>
-	// 			<button>Earlier Entries</button>
-	// 			<div id="selected-entry">
-	// 				<h2>Selected Entry</h2>
-	// 				<p>No entry selected.</p> 
-	// 			</div>
-	// 		</section>
-	// 	`);
-	// }
-
-	$('#dynamic-page').html(element);
+	$('main').html(element);
 
 	reloadCalendar();
-
-
 }
 
 function getPastEntryList(){
@@ -69,7 +49,7 @@ function getPastEntryList(){
 		}
 	}
 
-	element = element.concat(`
+	$('#selected-row').html(`
 		<div id="selected-entry">
 			<h2>Selected Entry</h2>
 			<p>No entry selected.</p> 
@@ -107,15 +87,130 @@ function showSelectedEntry(entry){
 		<button id="delete-button">Delete</button>
 	`);
 
-	$('#selected-entry').html(element);
+	$('#selected-row').html(element);
+}
+
+function editEntryElement(){
+	let editEntryElement = '';
+
+	editEntryElement = editEntryElement.concat(`
+		<h2>Edit Entry</h2>
+		<form method="" action="" id="edit-entry-form">
+			<fieldset id="emotions-fieldset">
+				<legend>How do I feel today? (required)</legend>
+				<label for="happy">Happy</label>
+				<input type="radio" name="daily-emotion" value="happy" required="true">
+				<label for="sad">Sad</label>
+				<input type="radio" name="daily-emotion" value="sad" required="true">
+				<label for="angry">Angry</label>
+				<input type="radio" name="daily-emotion" value="angry" required="true">
+				<label for="confused">Confused</label>
+				<input type="radio" name="daily-emotion" value="confused" required="true">
+				<label for="afraid">Afraid</label>
+				<input type="radio" name="daily-emotion" value="afraid" required="true">
+				<label for="surprised">Surprised</label>
+				<input type="radio" name="daily-emotion" value="surprised" required="true">
+				<label for="disgusted">Disgusted</label>
+				<input type="radio" name="daily-emotion" value="disgusted" required="true"><br>
+
+				<label for="emotion-summary">Why do I think I feel this way? (required)</label>
+				<textarea name="emotion-summary" required="true" form="create-entry-form"></textarea>
+			</fieldset>
+			<fieldset>
+				<legend></legend>
+	`);
+
+	for(let i = 0; i < prompts.length; i++){
+		editEntryElement = editEntryElement.concat(`
+			<div class="prompt-option">
+				<label for="text-prompt-${prompts[i].id}" class="prompt-text  inactive-prompt">${prompts[i].prompt}</label>
+			</div>
+		`);
+	}
+
+	editEntryElement = editEntryElement.concat(`
+			</fieldset>
+			<button id="submit-edits">Submit Edits</button>
+			<button id="cancel-edits" type="button">Cancel</button>
+		</form>
+	`);
+
+	$('#selected-row').html(editEntryElement);
+}
+
+// add the data from the entry to edit
+function populateEditForm(){
+	$(`input[value="${selected_entry.daily_emotion}"]`).prop('checked', true);
+	$('[name="emotion-summary"]').val(selected_entry.emotion_summary);
+
+	for(let i = 0; i < selected_entry.optional_prompts.length; i++){
+		for(let j = 0; j < prompts.length; j++){
+			if(selected_entry.optional_prompts[i].prompt === prompts[j].prompt){
+				$($('.prompt-option')[j]).html(`
+					<label for="text-prompt-${prompts[j].id}" class="prompt-text  active-prompt">${prompts[j].prompt}</label>
+					<textarea name="text-prompt-${prompts[j].id}"></textarea><br>
+					<button type="button" class="hide-prompt">Cancel</button>
+				`);
+
+				$(`[name="text-prompt-${j}"`).val(selected_entry.optional_prompts[i].answer);
+
+				console.log(i + ' ' + j);
+
+				break;
+			}
+		}
+	}
+}
+
+function submitEntryEditsListener(){
+	$('main').on('submit', '#edit-entry-form', function(event){
+		event.preventDefault();
+
+		const query = {
+			daily_emotion: $('[name="daily-emotion"]:checked').val(),
+			emotion_summary: $('[name="emotion-summary"]').val()
+		}
+
+		const text_prompts = $('.prompt-option');
+
+		for(let i = 0; i < text_prompts.length; i++){
+			const textarea = $($('.prompt-option')[i]).find('textarea');
+			if(textarea.length > 0){
+				query[`${$(textarea).attr('name')}`] = $(textarea).val();
+			}
+		}
+		
+		$.ajax({
+			url: '/entries/' + selected_entry.id,
+			data: query,
+			type: 'PUT',
+			success: function(){
+				loadRecentEntriesPage();
+				underlinePageLabel($('#past-entries-page'));
+
+				loadRecentEntries();
+				$('HTML, BODY').animate({scrollTop: 0});
+			}
+		});
+	});
+}
+
+function cancelEditsListener(){
+	$('main').on('click', '#cancel-edits', function(event){
+		showSelectedEntry(selected_entry);
+	})
 }
 
 function editEntryListener(){
+	$('main').on('click', '#edit-button', function(event){
+		editEntryElement();
 
+		populateEditForm();
+	});
 }
 
 function deleteEntryListener(){
-	$('#dynamic-page').on('click', '#delete-button', function(event){
+	$('main').on('click', '#delete-button', function(event){
 		$.ajax({
 			url: '/entries/' + selected_entry.id,
 			type: 'DELETE',
@@ -131,13 +226,10 @@ function deleteEntryListener(){
 }
 
 function selectedEntryListener(){
-	$('#dynamic-page').on('click', '.entry-excerpt', function(event){
+	$('main').on('click', '.entry-excerpt', function(event){
 		const entry = RecentEntries[$(this).index() - 1];
 
 		showSelectedEntry(entry);
-
-		const y = $('#selected-entry').position();
-		$('HTML, BODY').animate({scrollTop: y.top});
 	});
 }
 
@@ -145,6 +237,8 @@ function createListeners(){
 	selectedEntryListener();
 	editEntryListener();
 	deleteEntryListener();
+	submitEntryEditsListener();
+	cancelEditsListener();
 }
 
 $(createListeners());

@@ -1,10 +1,9 @@
-const prompts = [];
-
 function loadNewEntryPage(){
 	let newEntryElement = '';
 
 	newEntryElement = newEntryElement.concat(`
-		<section id="create-entry-section">
+	<section class="col-12">
+		<section class="row" id="create-entry-section">
 			<h2>Create An Entry</h2>
 			<form method="post" action="/entries" id="create-entry-form">
 				<fieldset id="emotions-fieldset">
@@ -40,17 +39,18 @@ function loadNewEntryPage(){
 	}
 
 	newEntryElement = newEntryElement.concat(`
-				</fieldset>
-				<button id="submit-entry">Submit Entry</button>
-			</form>
+					</fieldset>
+					<button id="submit-entry">Submit Entry</button>
+				</form>
+			</section>
 		</section>
 	`);
 
-	$('#dynamic-page').html(newEntryElement);
+	$('main').html(newEntryElement);
 }
 
 function promptEnableListener(){
-	$('#dynamic-page').on('click.enable', '.prompt-text', function(event){
+	$('main').on('click.enable', '.prompt-text', function(event){
 		if($(this).hasClass('inactive-prompt')){
 			const y = $($(this).parent()).position();
 
@@ -68,7 +68,7 @@ function promptEnableListener(){
 }
 
 function promptDisableListener(){
-	$('#dynamic-page').on('click', '.hide-prompt', function(event){
+	$('main').on('click', '.hide-prompt', function(event){
 		const element_index = $(this).parent().index() - 1;
 
 		$($(this).parent()).html(`

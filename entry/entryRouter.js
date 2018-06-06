@@ -187,8 +187,6 @@ router.put('/:id', jsonParser, checkUpdateEntryBody, (req, res) => {
 		}
 	}
 
-	bodyData['optional_prompts'] = newData;
-
 	Entry
 		.findById(req.params.id)
 		.update(bodyData)
