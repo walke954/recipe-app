@@ -154,8 +154,6 @@ function populateEditForm(){
 
 				$(`[name="text-prompt-${j}"`).val(selected_entry.optional_prompts[i].answer);
 
-				console.log(i + ' ' + j);
-
 				break;
 			}
 		}
