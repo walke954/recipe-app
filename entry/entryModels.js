@@ -35,4 +35,4 @@ entrySchema.methods.serialize = function(){
 
 const Entry = mongoose.model('Entry', entrySchema);
 
-module.exports = {Entry, Prompts};
+module.exports = {Entry, Prompts, entrySchema};

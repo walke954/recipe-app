@@ -3,32 +3,50 @@ const router = express.Router();
 
 const mongoose = require('mongoose');
 
-const {Entry, Prompts} = require('./entryModels');
+const {Prompts} = require('./entryModels');
+const {User} = require('../user/userModels')
 
 const {param, body, query, validationResult} = require('express-validator/check');
 const {sanitizeBody} = require('express-validator/filter');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
+const jwt = require('jsonwebtoken');
+const {JWT_SECRET} = require('../config');
+
+// returns the username from a request 'authorization' header
+function getUsernameFromJwt(req){
+	const token = req.headers.authorization.split(' ')[1];
+	const tokenPayload = jwt.verify(token, JWT_SECRET);
+	const username = tokenPayload.user.username;
+
+	return username;
+}
 
 const checkForMonth = [
 	query('month'),
 	query('year')
 ];
 
-router.get('/monthly', jsonParser, checkForMonth, (req, res) => {
+router.get('/', jsonParser, checkForMonth, (req, res) => {
 	const errors = validationResult(req);
 
 	if (!errors.isEmpty()) {
 		return res.status(422).json({errors: errors.mapped()});
 	}
 
-	Entry
-		.find({month: req.query.month, year: req.query.year})
-		.then(entry => {
-			res.json({
-				entries: entry.map(
-					(entry) => entry.serialize())
+	const _username = getUsernameFromJwt(req);
+
+	User
+		.find({username: _username})
+		.then(user => {
+			return user[0].entries;
+		})
+		.then(_entries => {
+			const entries = _entries.filter(entry => {
+				return entry.month == req.query.month && entry.year == req.query.year;
 			});
+			
+			res.json({entries});
 		})
 		.catch(err => {
 			console.log(err);
@@ -36,15 +54,9 @@ router.get('/monthly', jsonParser, checkForMonth, (req, res) => {
 		});
 });
 
-router.get('/prompts', (req, res) => {
-	res.json({
-		prompts: Prompts
-	});
-});
-
 const checkNewEntryBody = [
-	body('daily-emotion', `field 'daily-emotion' does not exist`).exists(),
-	body('emotion-summary', `field 'emotion-summary' does not exist`).exists()
+	body('daily_emotion', `field 'daily_emotion' does not exist`).exists(),
+	body('emotion_summary', `field 'emotion_summary' does not exist`).exists()
 ];
 
 router.post('/', jsonParser, checkNewEntryBody, (req, res) => {
@@ -54,6 +66,8 @@ router.post('/', jsonParser, checkNewEntryBody, (req, res) => {
 		return res.status(422).json({errors: errors.mapped()});
 	}
 
+	const _username = getUsernameFromJwt(req);
+
 	const date = new Date();
 
 	const current_year = date.getFullYear();
@@ -63,7 +77,7 @@ router.post('/', jsonParser, checkNewEntryBody, (req, res) => {
 	const optional_prompts_array = [];
 
 	body_values = Object.values(req.body);
-	body_keys = Object.keys(req.body)
+	body_keys = Object.keys(req.body);
 
 	for(let i = 0; i < body_keys.length; i++){
 		const key = body_keys[i];
@@ -77,77 +91,46 @@ router.post('/', jsonParser, checkNewEntryBody, (req, res) => {
 		}
 	}
 
-	Entry
-		.create({
-			date: current_date,
-			month: current_month,
-			year: current_year,
-			daily_emotion: req.body['daily-emotion'],
-			emotion_summary: req.body['emotion-summary'],
-			optional_prompts: optional_prompts_array
+	User
+		.find({username: _username})
+		.then(user => {
+			return user[0];
 		})
-		.then(entry => {
-			res.status(201).redirect('/')
-		})
-		.catch(err => {
-			console.log(err);
-			res.status(500).json({message: 'Internal Server Error'});
-		});
-});
-
-// router for testing, nearly identical except instead of refreshing the page it returns a json object containing the newly created entry
-router.post('/test', jsonParser, checkNewEntryBody, (req, res) => {
-	const errors = validationResult(req);
-
-	if (!errors.isEmpty()) {
-		return res.status(422).json({errors: errors.mapped()});
-	}
-
-	const date = new Date();
-
-	const current_year = date.getFullYear();
-	const current_month = date.getMonth();
-	const current_date = date.getDate();
-
-	const optional_prompts_array = [];
-
-	body_values = Object.values(req.body);
-	body_keys = Object.keys(req.body)
-
-	for(let i = 0; i < body_keys.length; i++){
-		const key = body_keys[i];
-		if(key.search('text-prompt') >= 0){
-			const id = body_keys[i].split('-')[2];
-
-			optional_prompts_array.push({
-				prompt: Prompts[id].prompt,
-				answer: body_values[i]
+		.then(user => {
+			user.entries.push({
+				date: current_date,
+				month: current_month,
+				year: current_year,
+				daily_emotion: req.body['daily_emotion'],
+				emotion_summary: req.body['emotion_summary'],
+				optional_prompts: optional_prompts_array
 			});
-		}
-	}
 
-	Entry
-		.create({
-			date: current_date,
-			month: current_month,
-			year: current_year,
-			daily_emotion: req.body['daily-emotion'],
-			emotion_summary: req.body['emotion-summary'],
-			optional_prompts: optional_prompts_array
+			user.save();
+
+			return user;
 		})
-		.then(entry => {
-			res.status(201).json(entry.serialize())
+		.then(user => {
+			res.status(201).json(user.serialize());
 		})
 		.catch(err => {
 			console.log(err);
 			res.status(500).json({message: 'Internal Server Error'});
 		});
 });
+
 
 router.delete('/:id', (req, res) => {
-	Entry
-		.findByIdAndRemove(req.params.id)
-		.then(entry => res.status(204).end())
+	const _username = getUsernameFromJwt(req);
+
+	User
+		.find({username: _username})
+		.then(user => {
+			user[0].entries.id(req.params.id).remove();
+			user[0].save();
+			return user;
+		})
+		.then(user => res.status(204).end())
 		.catch(err => {
 			console.log(err);
 			res.status(500).json({message: 'Internal Server Error'});
@@ -164,6 +147,8 @@ router.put('/:id', jsonParser, checkUpdateEntryBody, (req, res) => {
 	if (!errors.isEmpty()) {
 		return res.status(422).json({errors: errors.mapped()});
 	}
+
+	const _username = getUsernameFromJwt(req);
 
 	const bodyData = req.body;
 
@@ -189,10 +174,17 @@ router.put('/:id', jsonParser, checkUpdateEntryBody, (req, res) => {
 
 	bodyData.optional_prompts = newData;
 
-	Entry
-		.findById(req.params.id)
-		.update(bodyData)
-		.then(entry => res.status(204).end())
+	User
+		.findOne({username: _username})
+		.then(user => {
+			const entry = user.entries.id(req.params.id);
+			entry.set(bodyData);
+			return user.save();
+		})
+		.then(user => {
+			console.log(user);
+			res.status(204).end()
+		})
 		.catch(err => {
 			console.log(err);
 			res.status(500).json({message: 'Internal Server Error'});

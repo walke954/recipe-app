@@ -44,36 +44,133 @@ function loadRecentEntries(){
 		year: current_year
 	}
 
-	$.getJSON('/entries/monthly', query, function(data){
-		RecentEntries.splice(0, RecentEntries.length);
+	$.ajax({
+		url: '/entries',
+		data: query,
+		type: 'GET',
+		beforeSend: function(xhr){
+			xhr.setRequestHeader('Authorization', `Bearer ${localStorage.getItem('prjToken')}`);
+		},
+		success: function(data){
+			RecentEntries.splice(0, RecentEntries.length);
 
-		for(let i = 0; i < data.entries.length; i++){
-			RecentEntries.push(data.entries[i]);
+			for(let i = 0; i < data.entries.length; i++){
+				RecentEntries.push(data.entries[i]);
+			}
+
+			getPastEntryDates();
+			getPastEntryList();
 		}
-
-		getPastEntryDates();
-		getPastEntryList();
 	});
 }
 
-function createListeners(){
-	aboutSectionListener();
-	pastEntriesSectionListener();
-	createNewEntryListener();
+function loginPageElement(){
+	return `
+		<form id="login-form" method="" action="">
+			<fieldset>
+				<legend></legend>
+				<label>Username:</label>
+				<input type="text" name="username-input">
+				<label>Password:</label>
+				<input type="text" name="password-input">
+			</fieldset>
+			<button>Login</button>
+		</form>
+		<form id="submit-form" method="POST" action="/users">
+			<fieldset>
+				<legend></legend>
+				<label>Username:</label>
+				<input type="text" name="username">
+				<label>Password:</label>
+				<input type="text" name="password">
+			</fieldset>
+			<button>Submit</button>
+		</form>
+		<p>Don't have an account? Create one here!</p>
+	`;
 }
 
-function main(){
-	createListeners();
+function loginPageListener(){
+	$('#login-page').on('click', function(event){
+		$('main').html(loginPageElement());
+	});
+}
 
-	$.getJSON('/entries/prompts', function(data){
+function loginListener(){
+	$('main').on('submit', '#login-form', function(event){
+		event.preventDefault();
+
+		$.ajax({
+			url: '/auth/login',
+			data: {
+				username: $('[name="username-input"]').val(),
+				password: $('[name="password-input"]').val()
+			},
+			type: 'POST',
+			success: function(data){
+				localStorage.setItem('prjToken', data.authToken);
+				logIn();
+			}
+		});
+	});
+}
+
+function loadAppHome(){
+	loadRecentEntriesPage();
+	underlinePageLabel($('#past-entries-page'));
+	loadRecentEntries();
+
+	$('#login-page').html(profile_username);
+}
+
+function logIn(){
+	$.ajax({
+		url: '/users/logged',
+		type: 'GET',
+		beforeSend: function(xhr){
+			xhr.setRequestHeader('Authorization', `Bearer ${localStorage.getItem('prjToken')}`);
+		},
+		success: function(data){
+			createListeners();
+
+			profile_username = data.username;
+			month_profile_created = data.monthCreated;
+			year_profile_created = data.yearCreated;
+
+			loadAppHome();
+		},
+		error: function(){
+			$('main').html(loginPageElement());
+		}
+	});
+}
+
+function initApp(){
+	
+	$.getJSON('/prompts', function(data){
 		for(let i = 0; i < data.prompts.length; i++){
 			prompts.push(data.prompts[i]);
 		}
 
-		loadRecentEntriesPage();
-		underlinePageLabel($('#past-entries-page'));
-		loadRecentEntries();
+		logIn();
 	});
+}
+
+function createListeners(){
+	pastEntriesSectionListener();
+	createNewEntryListener();
+}
+
+function createInitialListeners(){
+	aboutSectionListener();
+	loginPageListener();
+	loginListener();
+}
+
+function main(){
+	createInitialListeners();
+
+	initApp();
 }
 
 $(main());

@@ -122,9 +122,6 @@ function calendarDayListener(){
 			const selectedEntry = RecentEntries[calendar_val];
 
 			showSelectedEntry(selectedEntry);
-
-			// const y = $('#selected-entry').position();
-			// $('HTML, BODY').animate({scrollTop: y.top});
 		}
 	});
 }

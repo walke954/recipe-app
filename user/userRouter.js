@@ -3,10 +3,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
-const {User} = require('./userModels')
+const {User} = require('./userModels');
 
 const router = express.Router();
+const jwt = require("jsonwebtoken");
+const {JWT_SECRET} = require('../config');
+const passport = require('passport');
 
+// registering a new user
 router.post('/', jsonParser, (req, res) => {
 	const required_fields = ['username', 'password'];
 	const missing_field = required_fields.find(field => !(field in req.body));
@@ -77,7 +81,9 @@ router.post('/', jsonParser, (req, res) => {
 		.then(hash => {
 			return User.create({
 				username,
-				password: hash
+				password: hash,
+				yearCreated: new Date().getFullYear(),
+				monthCreated: new Date().getMonth()
 			});
 		})
 		.then(user => res.status(201).json(user.serialize(user)))
@@ -87,6 +93,25 @@ router.post('/', jsonParser, (req, res) => {
 			}
 			console.log(err);
 			res.status(500).json({message: 'Internal Server Error'});
+		});
+});
+
+const jwtAuth = passport.authenticate('jwt', {session: false});
+
+// checks to see if user is already logged in
+router.get('/logged', jwtAuth, (req, res) => {
+	const token = req.headers.authorization.split(' ')[1];
+	const tokenPayload = jwt.verify(token, JWT_SECRET);
+	const _username = tokenPayload.user.username;
+
+	User
+		.findOne({username: _username})
+		.then(user => {
+			return res.send(user.accountBasics());
+		})
+		.catch(err => {
+			console.log(err);
+			return res.status(500).json({message: 'Internal Server Error'});
 		});
 });
 

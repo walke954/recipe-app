@@ -5,7 +5,7 @@ function loadNewEntryPage(){
 	<section class="col-12">
 		<section class="row" id="create-entry-section">
 			<h2>Create An Entry</h2>
-			<form method="post" action="/entries" id="create-entry-form">
+			<form method="" action="" id="create-entry-form">
 				<fieldset id="emotions-fieldset">
 					<legend>How do I feel today? (required)</legend>
 					<label for="happy">Happy</label>
@@ -77,9 +77,44 @@ function promptDisableListener(){
 	});
 }
 
+function submitNewEntryListener(){
+	$('main').on('submit', '#create-entry-form', function(event){
+		event.preventDefault();
+
+		const body = {
+			daily_emotion: $('[name="daily-emotion"]:checked').val(),
+			emotion_summary: $('[name="emotion-summary"]').val()
+		}
+
+		const text_prompts = $('.prompt-option');
+
+		for(let i = 0; i < text_prompts.length; i++){
+			const textarea = $($('.prompt-option')[i]).find('textarea');
+			if(textarea.length > 0){
+				body[`${$(textarea).attr('name')}`] = $(textarea).val();
+			}
+		}
+
+		$.ajax({
+			url: '/entries',
+			data: body,
+			type: 'POST',
+			beforeSend: function(xhr){
+				xhr.setRequestHeader('Authorization', `Bearer ${localStorage.getItem('prjToken')}`);
+			},
+			success: function(data){
+				loadRecentEntriesPage();
+				underlinePageLabel($('#past-entries-page'));
+				loadRecentEntries();
+			}
+		});
+	});
+}
+
 function createListeners(){
 	promptEnableListener();
 	promptDisableListener();
+	submitNewEntryListener();
 }
 
 function main(){

@@ -179,9 +179,12 @@ function submitEntryEditsListener(){
 		}
 		
 		$.ajax({
-			url: '/entries/' + selected_entry.id,
+			url: '/entries/' + selected_entry._id,
 			data: query,
 			type: 'PUT',
+			beforeSend: function(xhr){
+				xhr.setRequestHeader('Authorization', `Bearer ${localStorage.getItem('prjToken')}`);
+			},
 			success: function(){
 				loadRecentEntriesPage();
 				underlinePageLabel($('#past-entries-page'));
@@ -210,8 +213,11 @@ function editEntryListener(){
 function deleteEntryListener(){
 	$('main').on('click', '#delete-button', function(event){
 		$.ajax({
-			url: '/entries/' + selected_entry.id,
+			url: '/entries/' + selected_entry._id,
 			type: 'DELETE',
+			beforeSend: function(xhr){
+				xhr.setRequestHeader('Authorization', `Bearer ${localStorage.getItem('prjToken')}`);
+			},
 			success: function(){
 				loadRecentEntriesPage();
 				underlinePageLabel($('#past-entries-page'));
