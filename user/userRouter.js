@@ -115,4 +115,17 @@ router.get('/logged', jwtAuth, (req, res) => {
 		});
 });
 
+router.delete('/:id', jwtAuth, (req, res) => {
+	User
+		.findByIdAndRemove(req.params.id)
+		.then(() => {
+			console.log('Profile deleted')
+			res.status(204).end()
+		})
+		.catch(err => {
+			console.log(err);
+			res.status(500).json({message: 'Internal Server Error'});
+		});
+});
+
 module.exports = router;

@@ -1,0 +1,122 @@
+/* mobile default */
+#to-newUser {
+	color: blue;
+}
+
+#to-newUser:hover {
+	color: purple;
+	cursor: pointer;
+}
+
+#cancel-button {
+	float: right;
+}
+
+#login-form {
+	padding: 20px;
+	background-color: #eaeff9;
+	border-radius: 2px;
+}
+
+#login-form fieldset {
+	text-align: left;
+	margin-right: auto;
+	margin-left: auto;
+	width: 175px;
+}
+
+#login-form input{
+	width: 175px;
+	padding: 5px;
+	border-radius: 2px;
+	border: solid 3px #4CB5F5;
+	margin-bottom: 20px;
+}
+
+#login-form input:focus {
+	border: solid 3px #5dff7f;
+}
+
+#login-form button {
+	padding: 10px;
+}
+
+#submit-form {
+	padding: 20px;
+	background-color: #eaeff9;
+	border-radius: 2px;
+}
+
+#submit-form fieldset {
+	text-align: left;
+	margin-right: auto;
+	margin-left: auto;
+	width: 175px;
+}
+
+#submit-form input {
+	width: 175px;
+	padding: 5px;
+	border-radius: 2px;
+	border: solid 3px #4CB5F5;
+	margin-bottom: 20px;
+}
+
+#submit-form input:focus {
+	border: solid 3px #5dff7f;
+}
+
+#submit-form button {
+	padding: 10px;
+}
+
+#password-username-error {
+	color: red;
+	font-size: 15px;
+}
+
+#new-account-success {
+	background-color: #eaeff9;
+	margin-right: auto;
+	margin-left: auto;
+	text-align: center;
+}
+
+/* larger mobile default */
+@media only screen and (min-width: 425px) {
+	main {
+		padding: 20px;
+	}
+
+	#submit-form fieldset {
+		width: 225px;
+	}
+
+	#submit-form input {
+		width: 225px;
+	}
+
+	#login-form fieldset {
+		width: 225px;
+	}
+
+	#login-form input {
+		width: 225px;
+	}
+}
+
+/* non-mobile default */
+@media only screen and (min-width: 640px) {
+	#login-form {
+		padding: 40px;
+	}
+
+	#submit-form {
+		padding: 40px;
+	}
+
+	#login-newUser-row {
+		background-color: #99ffb3;
+		width: 500px;
+	}
+}

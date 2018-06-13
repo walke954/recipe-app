@@ -3,7 +3,7 @@ const router = express.Router();
 
 const mongoose = require('mongoose');
 
-const {Prompts} = require('./entryModels');
+const {Prompts} = require('./prompts');
 const {User} = require('../user/userModels')
 
 const {param, body, query, validationResult} = require('express-validator/check');

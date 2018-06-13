@@ -3,7 +3,7 @@ const app = express();
 
 const entryRouter = require('./entry/entryRouter');
 const userRouter = require('./user/userRouter');
-const {Prompts} = require('./entry/entryModels');
+const {Prompts} = require('./entry/prompts');
 const User = require('./user/userModels');
 
 const jwt = require("jsonwebtoken");

@@ -1,8 +1,6 @@
-let selected_entry;
-
 function loadRecentEntriesPage(){
 	let element = `
-		<section class="col-8" id="selected">
+		<section class="col-9" id="selected">
 			<section class="row" id="calendar-row">
 				<h2>Find An Entry</h2>
 				<div id="calendar-section">
@@ -16,7 +14,7 @@ function loadRecentEntriesPage(){
 				<section class="row" id="selected-entry"></section>
 			</section>
 		</section>
-		<section class="col-4" id="past-entries">
+		<section class="col-3" id="past-entries">
 			<section class="row" id="entries-row">
 				<p>Loading entries...</p>
 			</section>
@@ -42,7 +40,7 @@ function getPastEntryList(){
 			element = element.concat(`
 				<div class="entry-excerpt">
 					<h3>${Object.keys(DAYS_IN_MONTH[entry.month])} ${entry.date}, ${entry.year}</h3>
-					<p>Today I felt <b>${entry.daily_emotion}</b>...</p>
+					<p>Today I felt <b>${entry.daily_emotion}</b>...</p><br>
 					<p>${entry.emotion_summary}</p>
 				</div>
 			`);
@@ -83,8 +81,10 @@ function showSelectedEntry(entry){
 	}
 
 	element = element.concat(`
-		<button id="edit-button">Edit</button>
-		<button id="delete-button">Delete</button>
+		<div id="edit-delete-box">
+			<button id="edit-button" class="button-blue">Edit</button>
+			<button id="delete-button" class="button-orange">Delete</button>
+		</div>
 	`);
 
 	$('#selected-row').html(element);
@@ -98,20 +98,35 @@ function editEntryElement(){
 		<form method="" action="" id="edit-entry-form">
 			<fieldset id="emotions-fieldset">
 				<legend>How do I feel today? (required)</legend>
-				<label for="happy">Happy</label>
-				<input type="radio" name="daily-emotion" value="happy" required="true">
-				<label for="sad">Sad</label>
-				<input type="radio" name="daily-emotion" value="sad" required="true">
-				<label for="angry">Angry</label>
-				<input type="radio" name="daily-emotion" value="angry" required="true">
-				<label for="confused">Confused</label>
-				<input type="radio" name="daily-emotion" value="confused" required="true">
-				<label for="afraid">Afraid</label>
-				<input type="radio" name="daily-emotion" value="afraid" required="true">
-				<label for="surprised">Surprised</label>
-				<input type="radio" name="daily-emotion" value="surprised" required="true">
-				<label for="disgusted">Disgusted</label>
-				<input type="radio" name="daily-emotion" value="disgusted" required="true"><br>
+				<div class="emotion-block">
+					<label for="happy">Happy</label>
+					<input type="radio" name="daily-emotion" value="happy" required="true">
+				</div>
+				<div class="emotion-block">
+					<label for="sad">Sad</label>
+					<input type="radio" name="daily-emotion" value="sad" required="true">
+				</div>
+				<div class="emotion-block">
+					<label for="angry">Angry</label>
+					<input type="radio" name="daily-emotion" value="angry" required="true">
+				</div>
+				<div class="emotion-block">
+					<label for="confused">Confused</label>
+					<input type="radio" name="daily-emotion" value="confused" required="true">
+				</div>
+				<div class="emotion-block">
+					<label for="afraid">Afraid</label>
+					<input type="radio" name="daily-emotion" value="afraid" required="true">
+				</div>
+				<div class="emotion-block">
+					<label for="surprised">Surprised</label>
+					<input type="radio" name="daily-emotion" value="surprised" required="true">
+				</div>
+				<div class="emotion-block">
+					<label for="disgusted">Disgusted</label>
+					<input type="radio" name="daily-emotion" value="disgusted" required="true"><br>
+				</div>
+				<br>
 
 				<label for="emotion-summary">Why do I think I feel this way? (required)</label>
 				<textarea name="emotion-summary" required="true" form="create-entry-form"></textarea>
@@ -130,8 +145,8 @@ function editEntryElement(){
 
 	editEntryElement = editEntryElement.concat(`
 			</fieldset>
-			<button id="submit-edits">Submit Edits</button>
-			<button id="cancel-edits" type="button">Cancel</button>
+			<button id="submit-edits" class="button-blue">Submit Edits</button>
+			<button id="cancel-edits" type="button" class="button-orange">Cancel</button>
 		</form>
 	`);
 
@@ -212,20 +227,37 @@ function editEntryListener(){
 
 function deleteEntryListener(){
 	$('main').on('click', '#delete-button', function(event){
-		$.ajax({
-			url: '/entries/' + selected_entry._id,
-			type: 'DELETE',
-			beforeSend: function(xhr){
-				xhr.setRequestHeader('Authorization', `Bearer ${localStorage.getItem('prjToken')}`);
-			},
-			success: function(){
-				loadRecentEntriesPage();
-				underlinePageLabel($('#past-entries-page'));
+		$('#edit-delete-box').css('color', 'red');
+		$('#edit-delete-box').html(`
+			<p style="display:inline-block;margin-right:10px">Are you sure?</p>
+			<button onclick="keepEntry()" class="button-orange">No</button>
+			<button onclick="deleteEntry()" class="button-blue">Yes</button>
+		`);
+	});
+}
 
-				loadRecentEntries();
-				$('HTML, BODY').animate({scrollTop: 0});
-			}
-		});
+function keepEntry(){
+	$('#edit-delete-box').css('color', 'black');
+	$('#edit-delete-box').html(`
+		<button id="edit-button" class="button-blue">Edit</button>
+		<button id="delete-button" class="button-orange">Delete</button>
+	`);
+}
+
+function deleteEntry(){
+	$.ajax({
+		url: '/entries/' + selected_entry._id,
+		type: 'DELETE',
+		beforeSend: function(xhr){
+			xhr.setRequestHeader('Authorization', `Bearer ${localStorage.getItem('prjToken')}`);
+		},
+		success: function(){
+			loadRecentEntriesPage();
+			underlinePageLabel($('#past-entries-page'));
+
+			loadRecentEntries();
+			$('HTML, BODY').animate({scrollTop: 0});
+		}
 	});
 }
 

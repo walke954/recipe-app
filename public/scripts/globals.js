@@ -5,9 +5,11 @@ let current_month = date.getMonth();
 let current_date = date.getDate();
 let current_day = date.getDay();
 
-let profile_username;
+let profile_basics;
 let month_profile_created;
 let year_profile_created;
+
+let selected_entry;
 
 const prompts = [];
 

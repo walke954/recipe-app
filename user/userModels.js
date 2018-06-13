@@ -14,12 +14,14 @@ const userSchema = mongoose.Schema({
 userSchema.methods.serialize = function(){
 	return {
 		username: this.username,
-		entries: this.entries
+		entries: this.entries,
+		date: new Date()
 	};
 }
 
 userSchema.methods.accountBasics = function(){
 	return{
+		id: this._id,
 		username: this.username,
 		yearCreated: this.yearCreated,
 		monthCreated: this.monthCreated

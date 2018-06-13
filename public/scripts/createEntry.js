@@ -8,20 +8,35 @@ function loadNewEntryPage(){
 			<form method="" action="" id="create-entry-form">
 				<fieldset id="emotions-fieldset">
 					<legend>How do I feel today? (required)</legend>
-					<label for="happy">Happy</label>
-					<input type="radio" name="daily-emotion" value="happy" required="true">
-					<label for="sad">Sad</label>
-					<input type="radio" name="daily-emotion" value="sad" required="true">
-					<label for="angry">Angry</label>
-					<input type="radio" name="daily-emotion" value="angry" required="true">
-					<label for="confused">Confused</label>
-					<input type="radio" name="daily-emotion" value="confused" required="true">
-					<label for="afraid">Afraid</label>
-					<input type="radio" name="daily-emotion" value="afraid" required="true">
-					<label for="surprised">Surprised</label>
-					<input type="radio" name="daily-emotion" value="surprised" required="true">
-					<label for="disgusted">Disgusted</label>
-					<input type="radio" name="daily-emotion" value="disgusted" required="true"><br>
+					<div class="emotion-block">
+						<label for="happy">Happy</label>
+						<input type="radio" name="daily-emotion" value="happy" required="true">
+					</div>
+					<div class="emotion-block">
+						<label for="sad">Sad</label>
+						<input type="radio" name="daily-emotion" value="sad" required="true">
+					</div>
+					<div class="emotion-block">
+						<label for="angry">Angry</label>
+						<input type="radio" name="daily-emotion" value="angry" required="true">
+					</div>
+					<div class="emotion-block">
+						<label for="confused">Confused</label>
+						<input type="radio" name="daily-emotion" value="confused" required="true">
+					</div>
+					<div class="emotion-block">
+						<label for="afraid">Afraid</label>
+						<input type="radio" name="daily-emotion" value="afraid" required="true">
+					</div>
+					<div class="emotion-block">
+						<label for="surprised">Surprised</label>
+						<input type="radio" name="daily-emotion" value="surprised" required="true">
+					</div>
+					<div class="emotion-block">
+						<label for="disgusted">Disgusted</label>
+						<input type="radio" name="daily-emotion" value="disgusted" required="true"><br>
+					</div>
+					<br>
 
 					<label for="emotion-summary">Why do I think I feel this way? (required)</label>
 					<textarea name="emotion-summary" required="true" form="create-entry-form"></textarea>
@@ -40,41 +55,13 @@ function loadNewEntryPage(){
 
 	newEntryElement = newEntryElement.concat(`
 					</fieldset>
-					<button id="submit-entry">Submit Entry</button>
+					<button id="submit-entry" class="button-blue">Submit Entry</button>
 				</form>
 			</section>
 		</section>
 	`);
 
 	$('main').html(newEntryElement);
-}
-
-function promptEnableListener(){
-	$('main').on('click.enable', '.prompt-text', function(event){
-		if($(this).hasClass('inactive-prompt')){
-			const y = $($(this).parent()).position();
-
-			const element_index = $(this).parent().index() - 1;
-
-			$($(this).parent()).html(`
-				<label for="text-prompt-${prompts[element_index].id}" class="prompt-text  active-prompt">${prompts[element_index].prompt}</label>
-				<textarea name="text-prompt-${prompts[element_index].id}"></textarea><br>
-				<button type="button" class="hide-prompt">Cancel</button>
-			`);
-
-			$('HTML, BODY').animate({scrollTop: y.top}, 500);
-		}
-	});
-}
-
-function promptDisableListener(){
-	$('main').on('click', '.hide-prompt', function(event){
-		const element_index = $(this).parent().index() - 1;
-
-		$($(this).parent()).html(`
-			<label for="text-prompt-${prompts[element_index].id}" class="prompt-text  inactive-prompt">${prompts[element_index].prompt}</label>
-		`);
-	});
 }
 
 function submitNewEntryListener(){
@@ -112,8 +99,6 @@ function submitNewEntryListener(){
 }
 
 function createListeners(){
-	promptEnableListener();
-	promptDisableListener();
 	submitNewEntryListener();
 }
 

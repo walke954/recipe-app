@@ -14,6 +14,7 @@ header {
 	color: white;
 	padding: 10px;
 	vertical-align: middle;
+	font-family: 'Lato', sans-serif;
 }
 
 #header-left {
@@ -31,7 +32,6 @@ header p {
 }
 
 header p:hover {
-	font-weight: bold;
 	cursor: pointer;
 }
 
@@ -47,61 +47,26 @@ header p:hover {
 	width: 75px;
 }
 
-main {
-	padding: 10px;
-}
-
-#about-row {
-	background-color: #eaeff9;
-	padding: 10px;
-	border-radius: 2px;
-}
-
-#calendar-row {
-	color: black;
-	text-align: center;
-	padding: 20px;
-}
-
-#calendar-row h2 {
-	padding: 10px;
-}
-
-#selected-row {
-	background-color: #eaeff9;
-	padding: 10px;
-	border-radius: 2px;
-	margin-bottom: 10px;
-}
-
-#entries-row {
-	background-color: #eaeff9;
-	padding: 10px;
-	border-radius: 2px;
-}
-
-#create-entry-section {
-	padding: 10px;
-	background-color: #eaeff9;
-	border-radius: 2px;
-}
-
 fieldset {
 	background-color: #eaeff9;
 	border: none;
 }
 
-textarea {
-	resize: none;
-	width: 80%;
-	min-height: 150px;
-	padding: 5px;
-	border: solid 3px #4CB5F5;
-	border-radius: 2px;
+label {
+	display: block;
+	padding-bottom: 3px;
+	padding-top: 3px;
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
 
-textarea:focus {
-	border: solid 3px #5dff7f;
+button {
+	font-weight: bold;
+}
+
+#about-row {
+	padding: 10px;
+	border-radius: 2px;
 }
 
 .inactive-prompt {
@@ -113,14 +78,6 @@ textarea:focus {
 	padding-left: 2px;
 	background-color: #5dff7f;
 	cursor: pointer;
-}
-
-label {
-	display: block;
-	padding-bottom: 3px;
-	padding-top: 3px;
-	margin-top: 5px;
-	margin-bottom: 5px;
 }
 
 .hide-prompt {
@@ -137,15 +94,22 @@ label {
 	cursor: pointer;
 }
 
-.re-edit-button {
+#emotions-fieldset label{
 	display: inline-block;
-	width: 50px;
+	margin-right: 10px;
 }
 
-.re-delete-button {
+#emotions-fieldset input{
 	display: inline-block;
-	width: 50px;
 }
+
+.emotion-block {
+	display: inline-block;
+	margin-right: 20px;
+	margin-left: 10px;
+}
+
+/*
 
 #submit-entry {
 	margin-top: 25px;
@@ -162,12 +126,4 @@ label {
 	cursor: pointer;
 }
 
-#emotions-fieldset label{
-	display: inline-block;
-	margin-right: 10px;
-}
-
-#emotions-fieldset input{
-	display: inline-block;
-	margin-right: 40px;
-}
+*/
