@@ -1,10 +1,10 @@
 const express = require('express');
 const app = express();
 
-const entryRouter = require('./entry/entryRouter');
-const userRouter = require('./user/userRouter');
+const entryRouter = require('./entry/router');
+const userRouter = require('./user/router');
 const {Prompts} = require('./entry/prompts');
-const User = require('./user/userModels');
+const User = require('./user/models');
 
 const jwt = require("jsonwebtoken");
 const morgan = require('morgan');

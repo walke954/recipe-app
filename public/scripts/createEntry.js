@@ -1,65 +1,82 @@
 function loadNewEntryPage(){
 	let newEntryElement = '';
 
-	newEntryElement = newEntryElement.concat(`
-	<section class="col-12">
-		<section class="row" id="create-entry-section">
-			<h2>Create An Entry</h2>
-			<form method="" action="" id="create-entry-form">
-				<fieldset id="emotions-fieldset">
-					<legend>How do I feel today? (required)</legend>
-					<div class="emotion-block">
-						<label for="happy">Happy</label>
-						<input type="radio" name="daily-emotion" value="happy" required="true">
-					</div>
-					<div class="emotion-block">
-						<label for="sad">Sad</label>
-						<input type="radio" name="daily-emotion" value="sad" required="true">
-					</div>
-					<div class="emotion-block">
-						<label for="angry">Angry</label>
-						<input type="radio" name="daily-emotion" value="angry" required="true">
-					</div>
-					<div class="emotion-block">
-						<label for="confused">Confused</label>
-						<input type="radio" name="daily-emotion" value="confused" required="true">
-					</div>
-					<div class="emotion-block">
-						<label for="afraid">Afraid</label>
-						<input type="radio" name="daily-emotion" value="afraid" required="true">
-					</div>
-					<div class="emotion-block">
-						<label for="surprised">Surprised</label>
-						<input type="radio" name="daily-emotion" value="surprised" required="true">
-					</div>
-					<div class="emotion-block">
-						<label for="disgusted">Disgusted</label>
-						<input type="radio" name="daily-emotion" value="disgusted" required="true"><br>
-					</div>
-					<br>
+	const dateCheck = RecentEntries.filter(entry => {
+		if(entry.date === new Date().getDate()){
+			return entry;
+		}
+	});
 
-					<label for="emotion-summary">Why do I think I feel this way? (required)</label>
-					<textarea name="emotion-summary" required="true" form="create-entry-form"></textarea>
-				</fieldset>
-				<fieldset>
-					<legend></legend>
-	`);
-
-	for(let i = 0; i < prompts.length; i++){
+	if(dateCheck.length !== 0){
 		newEntryElement = newEntryElement.concat(`
-			<div class="prompt-option">
-				<label for="text-prompt-${prompts[i].id}" class="prompt-text  inactive-prompt">${prompts[i].prompt}</label>
-			</div>
+		<section class="col-12">
+			<section class="row" id="create-entry-section">
+				<h2>Create An Entry</h2>
+				<p style="color:red">Sorry! An entry on today's date already exists. Entries can be edited on the 'Past Entries' page.</p>
+			</section>
+		</section>`);
+	}
+	else{
+		newEntryElement = newEntryElement.concat(`
+		<section class="col-12">
+			<section class="row" id="create-entry-section">
+				<h2>Create An Entry</h2>
+				<form method="" action="" id="create-entry-form">
+					<fieldset id="emotions-fieldset">
+						<legend>How do I feel today? (required)</legend>
+						<div class="emotion-block">
+							<label for="happy">Happy</label>
+							<input type="radio" name="daily-emotion" value="happy" required="true">
+						</div>
+						<div class="emotion-block">
+							<label for="sad">Sad</label>
+							<input type="radio" name="daily-emotion" value="sad" required="true">
+						</div>
+						<div class="emotion-block">
+							<label for="angry">Angry</label>
+							<input type="radio" name="daily-emotion" value="angry" required="true">
+						</div>
+						<div class="emotion-block">
+							<label for="confused">Confused</label>
+							<input type="radio" name="daily-emotion" value="confused" required="true">
+						</div>
+						<div class="emotion-block">
+							<label for="afraid">Afraid</label>
+							<input type="radio" name="daily-emotion" value="afraid" required="true">
+						</div>
+						<div class="emotion-block">
+							<label for="surprised">Surprised</label>
+							<input type="radio" name="daily-emotion" value="surprised" required="true">
+						</div>
+						<div class="emotion-block">
+							<label for="disgusted">Disgusted</label>
+							<input type="radio" name="daily-emotion" value="disgusted" required="true"><br>
+						</div>
+						<br>
+
+						<label for="emotion-summary">Why do I think I feel this way? (required)</label>
+						<textarea name="emotion-summary" required="true" form="create-entry-form"></textarea>
+					</fieldset>
+					<fieldset>
+						<legend></legend>
+		`);
+
+		for(let i = 0; i < prompts.length; i++){
+			newEntryElement = newEntryElement.concat(`
+				<div class="prompt-option">
+					<label for="text-prompt-${prompts[i].id}" class="prompt-text  inactive-prompt">${prompts[i].prompt}</label>
+				</div>
+			`);
+		}
+
+		newEntryElement = newEntryElement.concat(`
+						</fieldset>
+						<button id="submit-entry" class="button-blue">Submit Entry</button>
+					</form>
+				</section>
+			</section>
 		`);
 	}
-
-	newEntryElement = newEntryElement.concat(`
-					</fieldset>
-					<button id="submit-entry" class="button-blue">Submit Entry</button>
-				</form>
-			</section>
-		</section>
-	`);
 
 	$('main').html(newEntryElement);
 }

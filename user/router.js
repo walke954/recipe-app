@@ -3,7 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
-const {User} = require('./userModels');
+const {User} = require('./models');
 
 const router = express.Router();
 const jwt = require("jsonwebtoken");

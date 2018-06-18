@@ -4,7 +4,8 @@ const router = express.Router();
 const mongoose = require('mongoose');
 
 const {Prompts} = require('./prompts');
-const {User} = require('../user/userModels')
+const {User} = require('../user/models')
+const {Entry} = require('./models')
 
 const {param, body, query, validationResult} = require('express-validator/check');
 const {sanitizeBody} = require('express-validator/filter');
@@ -22,12 +23,12 @@ function getUsernameFromJwt(req){
 	return username;
 }
 
-const checkForMonth = [
+const checkDate = [
 	query('month'),
 	query('year')
 ];
 
-router.get('/', jsonParser, checkForMonth, (req, res) => {
+router.get('/', jsonParser, checkDate, (req, res) => {
 	const errors = validationResult(req);
 
 	if (!errors.isEmpty()) {
@@ -92,9 +93,21 @@ router.post('/', jsonParser, checkNewEntryBody, (req, res) => {
 	}
 
 	User
-		.find({username: _username})
+		.findOne({username: _username})
 		.then(user => {
-			return user[0];
+			// check if an entry with the current date already exists, this limits the user to one entry per day
+			let entryDateCheck = user.entries.filter(entry => {
+				if(entry.date === current_date && entry.month === current_month && entry.year === current_year){
+					return entry;
+				}
+			});
+
+			if(entryDateCheck.length !== 0){
+				return Promise.reject();
+			}
+
+			return user;
+
 		})
 		.then(user => {
 			user.entries.push({
@@ -111,7 +124,7 @@ router.post('/', jsonParser, checkNewEntryBody, (req, res) => {
 			return user;
 		})
 		.then(user => {
-			res.status(201).json(user.serialize());
+			res.status(201).json(user.getEntries());
 		})
 		.catch(err => {
 			console.log(err);
@@ -124,10 +137,10 @@ router.delete('/:id', (req, res) => {
 	const _username = getUsernameFromJwt(req);
 
 	User
-		.find({username: _username})
+		.findOne({username: _username})
 		.then(user => {
-			user[0].entries.id(req.params.id).remove();
-			user[0].save();
+			user.entries.id(req.params.id).remove();
+			user.save();
 			return user;
 		})
 		.then(user => res.status(204).end())
@@ -182,7 +195,6 @@ router.put('/:id', jsonParser, checkUpdateEntryBody, (req, res) => {
 			return user.save();
 		})
 		.then(user => {
-			console.log(user);
 			res.status(204).end()
 		})
 		.catch(err => {

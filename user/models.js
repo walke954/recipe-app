@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcryptjs = require('bcryptjs');
 
-const {entrySchema} = require('../entry/entryModels');
+const {entrySchema} = require('../entry/models');
 
 const userSchema = mongoose.Schema({
 	username: {type: String, required: true, unique: true},
@@ -13,9 +13,13 @@ const userSchema = mongoose.Schema({
 
 userSchema.methods.serialize = function(){
 	return {
-		username: this.username,
-		entries: this.entries,
-		date: new Date()
+		username: this.username
+	};
+}
+
+userSchema.methods.getEntries = function(){
+	return {
+		entries: this.entries
 	};
 }
 

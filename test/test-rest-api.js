@@ -4,27 +4,30 @@ const chaiHttp = require('chai-http');
 const {app, runServer, closeServer} = require('../server');
 
 const {TEST_DATABASE_URL} = require('../config');
+const {JWT_SECRET} = require('../config');
 
 const mongoose = require('mongoose');
 
-const {Entry, Prompts} = require('../entry/entryModels');
+const {Prompts} = require('../entry/prompts');
+const {User} = require('../user/models');
+const jwt = require("jsonwebtoken");
 
 const expect = chai.expect;
 
 chai.use(chaiHttp);
 
-function seedDB(){
-	const entry_array = [];
+function seedEntries(){
+	const entries = [];
 
 	for(let i = 0; i < 30; i++){
-		entry_array.push(generateRandomSeedEntry());
+		entries.push(generateRandomEntry());
 	}
 
-	return Entry.insertMany(entry_array);
+	return entries;
 }
 
 // for seeding db
-function generateRandomSeedEntry(){
+function generateRandomEntry(){
 	const year = 2018;
 	const month = Math.floor(Math.random() * (new Date().getMonth() + 1));
 
@@ -86,8 +89,8 @@ function generateRandomCreateEntry(){
 	]
 
 	let obj = {
-		'daily-emotion': emotionStates[Math.floor(Math.random() * emotionStates.length)],
-		'emotion-summary': randomStrings[Math.floor(Math.random() * randomStrings.length)],
+		'daily_emotion': emotionStates[Math.floor(Math.random() * emotionStates.length)],
+		'emotion_summary': randomStrings[Math.floor(Math.random() * randomStrings.length)],
 	}
 
 	for(let i = 0; i < Prompts.length; i++){
@@ -99,48 +102,133 @@ function generateRandomCreateEntry(){
 	return obj;
 }
 
-function emptyDb(){
-	console.warn('Deleting database');
-	return mongoose.connection.dropDatabase();
-}
-
 describe('Test Rest API', function(){
+	const username = "example";
+	const password = "examplepassword";
+	const monthCreated = 3;
+	const yearCreated = 2018;
+
+	const workingToken = jwt.sign(
+		{
+			user: {
+				username
+			}
+		},
+		JWT_SECRET,
+		{
+			algorithm: 'HS256',
+			subject: username,
+	  		expiresIn: '7d'
+		}
+	);
+
 	before(function(){
 		return runServer(TEST_DATABASE_URL);
 	});
 
 	beforeEach(function(){
-		return seedDB();
+		return User.hashPassword(password).then(password => {
+			User.create({
+				username,
+				password,
+				monthCreated,
+				yearCreated,
+				entries: seedEntries()
+			})
+		});
 	});
 
 	afterEach(function(){
-		return emptyDb();
+		return User.remove({});
 	});
 
 	after(function(){
 		return closeServer();
 	});
 
+	describe('Invalid Request', function(){
+		it('Should reject requests that lacks credentials', function(){
+			return chai.request(app)
+				.get('/users/logged')
+				.then((res) => {
+					expect(res).to.have.status(401);
+					return;
+				})
+		});
+	});
+
+	describe('Invalid Token', function(){
+		const token = jwt.sign(
+			{
+				username
+			},
+			'invalidSecret',
+			{
+				algorithm: 'HS256',
+          		expiresIn: '7d'
+			}
+		);
+		it('Should reject requests that lacks a valid token', function(){
+			return chai.request(app)
+				.get('/users/logged')
+				.set('Authorization', `Bearer ${token}`)
+				.then((res) => {
+					expect(res).to.have.status(401);
+					return;
+				})
+		});
+	});
+
+	describe('Expired Token', function(){
+		const token = jwt.sign(
+			{
+				user: {
+					username
+				},
+				exp: Math.floor(Date.now() / 1000) - 10
+			},
+			JWT_SECRET,
+			{
+				algorithm: 'HS256',
+          		subject: username
+			}
+		);
+		it('Should reject requests that have an expired token', function(){
+			return chai.request(app)
+				.get('/users/logged')
+				.set('Authorization', `Bearer ${token}`)
+				.then((res) => {
+					expect(res).to.have.status(401);
+					return;
+				})
+		});
+	});
+
 	describe('POST New Entry', function(){
 		it('a new entry should be posted to the server and database', function(){
 			const newEntry1 = generateRandomCreateEntry();
+
 			return chai.request(app)
-				.post('/entries/test')
+				.post('/entries/')
 				.set('Accept','application/json')
+				.set('Authorization', `Bearer ${workingToken}`)
 				.send(newEntry1)
 				.then(function(res){
 					expect(res).to.have.status(201);
 					expect(res).to.be.json;
 					expect(res.body).to.be.a('object');
-					expect(res.body).to.include.keys('daily_emotion', 'emotion_summary', 'date', 'month', 'year');
-					expect(res.body.id).to.not.be.null;
-					expect(res.body.date).to.equal(new Date().getDate());
-					expect(res.body.month).to.equal(new Date().getMonth());
-					expect(res.body.year).to.equal(new Date().getFullYear());
-					expect(res.body.daily_emotion).to.equal(newEntry1['daily-emotion']);
-					expect(res.body.emotion_summary).to.equal(newEntry1['emotion-summary']);
+					expect(res.body).to.include.keys('entries');
 
-					const prompts_list = res.body.optional_prompts;
+					// go to the 31th entry since that is the one we added (30 entries were seeded earlier)
+					expect(res.body.entries[30]).to.include.keys('daily_emotion', 'emotion_summary', 'date', 'month', 'year');
+					expect(res.body.id).to.not.be.null;
+					expect(res.body.entries[30].date).to.equal(new Date().getDate());
+					expect(res.body.entries[30].month).to.equal(new Date().getMonth());
+					expect(res.body.entries[30].year).to.equal(new Date().getFullYear());
+					expect(res.body.entries[30].daily_emotion).to.equal(newEntry1['daily_emotion']);
+					expect(res.body.entries[30].emotion_summary).to.equal(newEntry1['emotion_summary']);
+
+					const prompts_list = res.body.entries[30].optional_prompts;
 
 					expect(prompts_list).to.be.a('array');
 
@@ -162,37 +250,49 @@ describe('Test Rest API', function(){
 						}
 					}
 					
-					return Entry.findById(res.body.id);
+					return User.findOne({username: username});
 				})
-				.then(function(entry){
-					expect(entry.daily_emotion).to.equal(newEntry1['daily-emotion']);
-					expect(entry.emotion_summary).to.equal(newEntry1['emotion-summary']);
+				.then(function(user){
+					const entry = user.entries[30];
+					expect(entry.daily_emotion).to.equal(newEntry1['daily_emotion']);
+					expect(entry.emotion_summary).to.equal(newEntry1['emotion_summary']);
 				});
 		});
 	});
 
 	describe('GET Month Entries', function(){
 		it('should get every entry for a given month', function(){
-			const query = `?month=${Math.floor(Math.random() * (new Date().getMonth() + 1))}&year=2018`;
+			const queryMonth = Math.floor(Math.random() * (new Date().getMonth() + 1));
+			const query = `?month=${queryMonth}&year=2018`;
 
 			let resEntry;
+			let index;
 			return chai.request(app)
-				.get('/entries/monthly' + query)
+				.get('/entries' + query)
 				.set('Accept','application/json')
+				.set('Authorization', `Bearer ${workingToken}`)
 				.then(function(res){
 					expect(res).to.have.status(200);
 					expect(res.body).to.be.a('object');
 					expect(res.body.entries).to.be.a('array');
 
-					const entries = [];
+					index = res.body.entries.length - 1;
 
 					for(let i = 0; i < res.body.entries.length; i++){
 						expect(res.body.entries[i]).to.be.a('object');
-						expect(res.body.entries[i]).to.include.keys('id', 'daily_emotion', 'emotion_summary', 'date', 'month', 'year', 'optional_prompts');
+						expect(res.body.entries[i]).to.include.keys('_id', 'daily_emotion', 'emotion_summary', 'date', 'month', 'year', 'optional_prompts');
 					}
 
-					resEntry = res.body.entries[0];
-					entry = Entry.findById(resEntry.id);
+					return User.findOne({username: username});
+				})
+				.then(function(user){
+					const entries = user.entries.filter(entry => {
+						return entry.month == queryMonth && entry.year == 2018;
+					});
+
+					const entry = user.entries[index];
+
+					resEntry = entry;
 
 					return entry;
 				})
@@ -208,7 +308,7 @@ describe('Test Rest API', function(){
 		it('GET and compare all the prompts saved in entryModels.js with what is returned', function(){
 			let resEntry;
 			return chai.request(app)
-				.get('/entries/prompts')
+				.get('/prompts')
 				.set('Accept','application/json')
 				.then(function(res){
 					expect(res).to.have.status(200);
@@ -227,15 +327,18 @@ describe('Test Rest API', function(){
 	describe('DELETE Entry', function(){
 		let entry;
 		it('should delete an entry based off of an id', function(){
-			return Entry
-				.findOne()
-				.then(function(entryToDelete){
-					entry = entryToDelete;
-					return chai.request(app).delete('/entries/' + entry.id)
+			return User
+				.findOne({username: username})
+				.then(function(user){
+					const index = Math.floor(Math.random() * user.entries.length);
+					entry = user.entries[index];
+					return chai.request(app)
+						.delete('/entries/' + entry.id)
+						.set('Authorization', `Bearer ${workingToken}`)
 				})
 				.then(function(res){
 					expect(res).to.have.status(204);
-					return Entry.findById(entry.id);
+					return User.findById(entry.id);
 				})
 				.then(function(entryToDelete){
 					expect(entryToDelete).to.be.null;
@@ -251,20 +354,26 @@ describe('Test Rest API', function(){
 				'text-prompt-2': 'dmdmmdmdmdmdmmd'
 			}
 
-			return Entry
-				.findOne()
-				.then(function(entry){
-					updateFields.id = entry.id;
+			return User
+				.findOne({username: username})
+				.then(function(user){
+					const index = Math.floor(Math.random() * user.entries.length);
+					const entry = user.entries[index];
 
-					return chai.request(app).put('/entries/' + entry.id)
+					updateFields.id = entry.id;
+					return chai.request(app)
+						.put('/entries/' + entry.id)
 						.send(updateFields)
+						.set('Authorization', `Bearer ${workingToken}`)
 						.set('Accept','application/json')
 						.then(function(res){
 							expect(res).to.have.status(204);
 
-							return Entry.findById(updateFields.id);
+							return User.findOne({username: username});
 						})
-						.then(function(entry){
+						.then(function(updatedUser){
+							const entry = updatedUser.entries.id(updateFields.id);
+
 							expect(entry.emotion_summary).to.equal(updateFields.emotion_summary);
 							expect(entry.optional_prompts[0].prompt).to.equal(Prompts[1].prompt);
 							expect(entry.optional_prompts[0].answer).to.equal(updateFields['text-prompt-1']);
