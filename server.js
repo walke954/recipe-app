@@ -1,28 +1,56 @@
 const express = require('express');
 const app = express();
 
-const entryRouter = require('./entry/entryRouter');
-const userRouter = require('./userRouter');
+const entryRouter = require('./entry/router');
+const userRouter = require('./user/router');
+const {Prompts} = require('./entry/prompts');
+const User = require('./user/models');
 
+const jwt = require("jsonwebtoken");
 const morgan = require('morgan');
-
 const mongoose = require('mongoose');
-
 const bodyParser = require('body-parser');
+
+const {JWT_SECRET, PORT, DATABASE_URL} = require('./config');
+const {router: authRouter, localStrategy, jwtStrategy} = require('./auth');
+const passport = require('passport');
 
 mongoose.Promise = global.Promise;
 
-const {PORT, DATABASE_URL} = require('./config');
-
 app.use(express.static('public'));
+
 app.use(morgan('common'));
 
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 
-app.use('/entries', entryRouter);
+passport.use(localStrategy);
+passport.use(jwtStrategy);
+
+// CORS
+app.use(function (req, res, next) {
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+	res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE');
+	if (req.method === 'OPTIONS') {
+		return res.send(204);
+	}
+	next();
+});
+
 app.use('/users', userRouter);
+app.use('/auth', authRouter);
+
+app.get('/prompts', (req, res) => {
+	res.json({
+		prompts: Prompts
+	});
+});
+
+const jwtAuth = passport.authenticate('jwt', {session: false});
+
+app.use('/entries', jwtAuth, entryRouter);
 
 let server;
 

@@ -1,0 +1,149 @@
+* {
+	box-sizing: content-box;
+	margin: 0px;
+	padding: 0px;
+	outline: 0px;
+}
+
+*:focus {
+	outline: 5px dashed maroon;
+}
+
+body {
+	background-color: #eaeff9;
+	height: 100%;
+}
+
+header {
+	background-color: #4CB5F5;
+	color: white;
+	padding: 10px;
+	vertical-align: middle;
+	font-family: 'Lato', sans-serif;
+}
+
+section {
+	margin-bottom: 20px;
+}
+
+footer {
+	background-color: #4CB5F5;
+	position: absolute;
+	bottom: 0px;
+}
+
+input[type='radio'] {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	-ms-appearance: none;
+	-o-appearance: none;
+	appearance: none;
+}
+
+#header-left {
+	display: inline-block;
+	padding-right: 20px;
+}
+
+#header-right {
+	display: inline-block;
+}
+
+header p {
+	display: inline-block;
+	padding-right: 20px;
+}
+
+header p:hover {
+	cursor: pointer;
+}
+
+fieldset {
+	background-color: azure;
+	border: none;
+}
+
+label {
+	display: block;
+	padding-bottom: 3px;
+	padding-top: 3px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+button {
+	font-weight: bold;
+}
+
+#about-row {
+	padding: 10px;
+	border-radius: 2px;
+}
+
+.inactive-prompt {
+	color: gray;
+	border-radius: 0px 5px 5px 0px;
+}
+
+.inactive-prompt:hover {
+	padding-left: 2px;
+	background-color: #4be4f5;
+	cursor: pointer;
+}
+
+.active-prompt:hover {
+	background-color: #4be4f5;
+	cursor: pointer;
+}
+
+.hide-prompt {
+	color: white;
+	height: 35px;
+	width: 150px;
+	background-color: #F0810F;
+	border: none;
+	border-radius: 2px;
+}
+
+.hide-prompt:hover {
+	background-color: #ef4e0e;
+	cursor: pointer;
+}
+
+#emotions-fieldset label{
+	display: inline-block;
+	margin-right: 10px;
+}
+
+#emotions-fieldset input{
+	display: inline-block;
+}
+
+.emotion-block {
+	display: inline-block;
+	margin-right: 10px;
+	margin-left: 10px;
+	transition: 0.5s;
+	-webkit-transition: 0.5s;
+	border-radius: 2px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.emotion-block:hover {
+	background-color: #4be4f5;
+	cursor: pointer;
+}
+
+.emotion-block img {
+	width: 100px;
+	display: block;
+}
+
+.emotion-selected {
+	background-color: #64fc80;
+}
+
+.emotion-selected.emotion-block {
+	background-color: #64fc80;
+}

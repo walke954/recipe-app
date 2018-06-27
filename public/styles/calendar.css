@@ -1,0 +1,120 @@
+/* mobile default */
+#calendar-row {
+	text-align: center;
+	padding-top: 2vw;
+}
+
+#calendar-section h3{
+	font-size: 8vw;
+}
+
+#calendar-section {
+	background-color: slategray;
+	color: white;
+	padding: 5px;
+	min-width: 260px;
+	width: calc(80vw);
+	max-width: 600px;
+	text-align: center;
+	border-radius: 2px;
+	font-family: 'Merriweather', serif;
+	display: inline-block;
+	vertical-align: middle;
+	margin-bottom: 10px;
+	display: inline-block;
+}
+
+#calendar-section:hover {
+	cursor: default;
+}
+
+#calendar {
+	width: 100%;
+}
+
+td {
+	background-color: azure;
+	color: black;
+	min-width: 25px;
+	width: 14%;
+	border-radius: 2px;
+	text-align: center;
+	padding: 4px;
+	font-size: calc(3vw + 1px);
+	height: 7vw;
+	max-height: 50px;
+}
+
+td:hover {
+	cursor: default;
+}
+
+td[data-pastEntry-day]:hover {
+	background-color: #4be4f5;
+	cursor: pointer;
+}
+
+td[data-current-day] {
+	background-color: #00ff59;
+}
+
+td[data-future-day] {
+	color: white;
+	background-color: lightgray;
+}
+
+td[data-pastEntry-day]{
+	background-color: #4CB5F5;
+}
+
+td[data-current-day][data-pastEntry-day] {
+	background-color: #00ff59;
+}
+
+.calendar-buttons {
+	background-color: #4CB5F5;
+	border: none;
+	border-radius: 2px;
+	width: calc(50% - 5px);
+	height: 10vw;
+	max-height: 70px;
+	font-weight: bolder;
+	color: white;
+	font-size: 7vw;
+}
+
+.calendar-buttons:hover {
+	background-color: #4be4f5;
+	cursor: pointer;
+}
+
+td[data-current-day]:hover {
+	background-color: #64fc80;
+	cursor: pointer;
+}
+
+.calendar-buttons:disabled {
+	background-color: lightgrey;
+	cursor: default;
+}
+
+#calendar-header {
+	font-size: 25px;
+	margin: 5px;
+}
+
+/* non-mobile default */
+@media only screen and (min-width: 640px) {
+  	td {
+		font-size: 20px;
+		height: 50px;
+	}
+
+	#calendar-section h3{
+		font-size: 60px;
+	}
+
+	.calendar-buttons{
+		font-size: 60px;
+	}
+}
