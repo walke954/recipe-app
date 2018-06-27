@@ -1,7 +1,7 @@
 {
-  "name": "recipe-app",
+  "name": "reflect-app",
   "version": "1.0.0",
-  "description": "Create, manage, and share recipes.",
+  "description": "Create and manage journal entries.",
   "main": "server.js",
   "scripts": {
     "test": "mocha --exit",

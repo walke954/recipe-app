@@ -1,9 +1,15 @@
 #selected-row {
-	background-color: #eaeff9;
 	padding: 10px;
 	border-radius: 2px;
 	margin-bottom: 10px;
 	max-width: 800px;
+}
+
+#selected-entry-emotion {
+	display: block;
+	width: 180px;
+	margin-right: auto;
+	margin-left: auto;
 }
 
 legend {
@@ -11,7 +17,6 @@ legend {
 }
 
 #entries-row {
-	background-color: #eaeff9;
 	padding: 10px;
 	border-radius: 2px;
 	max-width: 800px;
@@ -19,12 +24,10 @@ legend {
 
 #create-entry-section {
 	padding: 10px;
-	background-color: #eaeff9;
 	border-radius: 2px;
 }
 
 textarea {
-	resize: none;
 	width: 80%;
 	min-height: 150px;
 	padding: 5px;
@@ -38,8 +41,8 @@ textarea:focus {
 }
 
 .entry-excerpt {
-	transition: 0.8s;
-	-webkit-transition: 0.8s;
+	transition: 0.5s;
+	-webkit-transition: 0.5s;
 	margin-bottom: 10px;
 	max-height: 150px;
 	text-overflow: ellipsis;
@@ -49,12 +52,14 @@ textarea:focus {
 
 .entry-excerpt:hover {
 	padding-left: 15px;
-	background-color: #5dff7f;
+	background-color: #4be4f5;
 	cursor: pointer;
 }
 
 .entry-excerpt p {
 	display: inline-block;
+	position: relative;
+	top: -20px;
 }
 
 #selected-entry {
@@ -67,4 +72,32 @@ textarea:focus {
 
 #selected-entry p {
 	margin-bottom: 10px;
+}
+
+.emotion-excerpt {
+	width: 50px;
+	display: inline-block;
+}
+
+/* non-mobile default */
+@media only screen and (min-width: 640px) {
+  	td {
+		font-size: 20px;
+		height: 50px;
+	}
+
+	#calendar-section h3{
+		font-size: 60px;
+	}
+
+	#entries-row h2 {
+		font-size: 40px;
+	}
+
+}
+
+@media only screen and (min-width: 860px){
+	#entries-row {
+		min-height: calc(100vh - 125px);
+	}
 }

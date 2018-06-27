@@ -1,35 +1,52 @@
 function aboutSectionListener(){
 	$('header').on('click', '#about-page', function(event){
-		$('main').html(`
+		$('main').html(aboutPageElement());
+
+		underlinePageLabel(this);
+		$('footer').html('');
+	});
+
+	$('header').on('keydown', '#about-page', function(event){
+		if(event.keyCode === 32 || event.keyCode === 13){
+			$('main').html(aboutPageElement());
+
+			underlinePageLabel(this);
+			$('footer').html('');
+		}
+	});
+}
+
+function aboutPageElement(){
+	return `
 			<section class="col-12">
 				<section class="row" id="about-row">
 					<h2>About</h2>
-					<h3>What is 'Personal Reflective Journal'?</h3>
+					<h3>What is 'Reflect'?</h3>
 					<p>The 'Person Reflective Journal' is a personal journal that is accessible to you and you alone. The journal utilizes a series of prompts that can allow you to reflect on the day and explore your emotional or personal state. I believe that reflection is one of the keys to dealing with our own personal struggles and that by writing (or typing) these conflicts can lead to clarity and positivity. While this should never completely substitute actual therapy conducted by a professional, this could certainly be used as a helpful tool for discovering your place in the world.</p>
 					<h3>How does it work?</h3>
-					<p>At the top of your 'Personal Page', you will see a calendar filled in with dates. Previous entries can be accessed through this interface in case you want to go back and read past entries. New entries can be posted through the 'New Entry' link, and can only be posted once per day. Each post consists of a series of required and optional prompts. Click the 'Post' button to create a new entry!</p>
+					<p>At the top of your 'Personal Page', you will see a calendar filled in with dates. Previous entries can be accessed through this interface in case you want to go back and read past entries. New entries can be posted through the 'New Entry' link, and can only be posted once per day. Each post consists of a series of required and optional prompts. Click the 'Post' button to create a new entry!</p><br><br>
+					<p><i>Emoji icons were created by Bruno Maia, IconTexto at <a href="http://www.icontexto.com">http://www.icontexto.com</a>.<br>
+						These icons were released under CC License Attribution-Noncommercial 3.0</i></p>
 				</section>
 			</section>
-		`);
+		`;
+}
 
-		underlinePageLabel(this);
-	});
+function loadPastEntriesPage(){
+	loadRecentEntriesPage();
+	underlinePageLabel($('#home-page'));
+
+	loadRecentEntries();
 }
 
 function pastEntriesSectionListener(){
-	$('header').on('click', '#past-entries-page', function(event){
-		loadRecentEntriesPage();
-		underlinePageLabel($('#past-entries-page'));
-
-		loadRecentEntries();
+	$('header').on('click', '#home-page', function(event){
+		loadPastEntriesPage();
 	});
-}
-
-function createNewEntryListener(){
-	$('header').on('click', '#new-entry-page', function(event){
-		loadNewEntryPage();
-
-		underlinePageLabel(this);
+	$('header').on('keydown', '#home-page', function(event){
+		if(event.keyCode === 32 || event.keyCode === 13){
+			loadPastEntriesPage();
+		}
 	});
 }
 
@@ -75,42 +92,51 @@ function loginPageElement(){
 				<form id="login-form" method="" action="">
 					<fieldset>
 						<legend></legend>
-						<label>Username:</label>
-						<input type="text" name="username-input" required="true">
-						<label>Password:</label>
-						<input type="password" name="password-input" required="true">
+						<label for="username-input">Username:</label>
+						<input type="text" name="username-input" id="username-input" required="true">
+						<label for="password-input">Password:</label>
+						<input type="password" name="password-input" id="password-input" required="true">
 						<button class="button-blue">Login</button>
 						<p id="password-username-error"></p>
 					</fieldset>
 				</form>
 			</section>
-			<p class="extra-text">Don't have an account? Create one <b id="to-newUser">here</b>!</p>
+			<p class="extra-text">Don't have an account? Create one <b id="to-newUser" tabindex="0" role="button">here</b>!</p>
 		</section>
 	`;
 }
 
 function createAccountPageListener(){
 	$('main').on('click', '#to-newUser', function(event){
-		$('#login-newUser-page').html(`
+		$('#login-newUser-page').html(createAccountElement());
+	});
+	$('main').on('keydown', '#to-newUser', function(event){
+		if(event.keyCode === 32 || event.keyCode === 13){
+			$('#login-newUser-page').html(createAccountElement());
+		}
+	});
+}
+
+function createAccountElement(){
+	return `
 			<h2>Sign Up</h2>
 			<section class="row" id="login-newUser-row">
 				<form id="submit-form" method="" action="">
 					<fieldset>
 						<legend></legend>
-						<label>Username:</label>
-						<input type="text" name="username" required="true">
-						<label>Password:</label>
-						<input type="password" name="password" required="true">
-						<label>Re-type Password:</label>
-						<input type="password" name="password-2" required="true">
+						<label for="username">Username:</label>
+						<input type="text" name="username" id="username" required="true">
+						<label for="password">Password:</label>
+						<input type="password" name="password" id="password" required="true">
+						<label for="password-2">Re-type Password:</label>
+						<input type="password" name="password-2" id="password-2" required="true">
 						<button class="button-blue">Submit</button>
 						<button type="button" id="cancel-button" class="button-orange">Cancel</button>
 						<p id="password-username-error"></p>
 					</fieldset>
 				</form>
 			</section>
-		`);
-	});
+		`;
 }
 
 function loginPageListener(){
@@ -118,6 +144,13 @@ function loginPageListener(){
 		$('main').html(loginPageElement());
 
 		underlinePageLabel(this);
+	});
+	$('header').on('keydown', '#login-page', function(event){
+		if(event.keyCode === 32 || event.keyCode === 13){
+			$('main').html(loginPageElement());
+
+			underlinePageLabel(this);
+		}
 	});
 }
 
@@ -145,14 +178,13 @@ function loginListener(){
 
 function loadAppHome(){
 	loadRecentEntriesPage();
-	underlinePageLabel($('#past-entries-page'));
+	underlinePageLabel($('#home-page'));
 	loadRecentEntries();
 
 	$('#header-right').html(`
-		<p id="about-page">About</p>
-		<p id="past-entries-page">Past Entries</p>
-		<p id="new-entry-page">New Entry</p>
-		<p id="account-page">Account</p>
+		<p id="about-page" tabindex="0">About</p>
+		<p id="home-page" tabindex="0">Home</p>
+		<p id="account-page" tabindex="0">Account</p>
 	`);
 }
 
@@ -185,12 +217,14 @@ function logIn(){
 			year_profile_created = data.yearCreated;
 
 			loadAppHome();
+
+			underlinePageLabel('#home-page');
 		},
 		error: function(){
 			$('main').html(loginPageElement());
 			$('#header-right').html(`
-				<p id="about-page">About</p>
-				<p id="login-page">Login</p>
+				<p id="about-page" tabindex="0" role="button">About</p>
+				<p id="login-page" tabindex="0" role="button">Login</p>
 			`);
 			underlinePageLabel($('#login-page'));
 		}
@@ -246,23 +280,36 @@ function cancelAccountPageListener(){
 
 function accountPageListener(){
 	$('header').on('click', '#account-page', function(event){
-		$('main').html(`
-			<section id="user-account-page" class="col-12">
-				<section class="row">
-					<h1>Account Settings</h1>
-					<h3>Account Username:</h3>
-					<p>${profile_basics.username}</p>
-					<h3>Sign Out:</h3>
-					<button id="logout-account">Logout</button>
-					<p>Warning! Accounts that are deleted are permanently gone and cannot be recovered.</p>
-					<h3>Delete Account:</h3>
-					<button id="delete-account">Delete</button>
-				</section>
-			</section>
-		`);
+		$('main').html(accountPageElement());
 
 		underlinePageLabel(this);
+		$('footer').html('');
 	});
+	$('header').on('keydown', '#account-page', function(event){
+		if(event.keyCode === 32 || event.keyCode === 13){
+			$('main').html(accountPageElement());
+
+			underlinePageLabel(this);
+			$('footer').html('');
+		}
+	});
+}
+
+function accountPageElement(){
+	return `
+				<section id="user-account-page" class="col-12">
+					<section class="row">
+						<h1>Account Settings</h1>
+						<h3>Account Username:</h3>
+						<p>${profile_basics.username}</p>
+						<h3>Sign Out:</h3>
+						<button id="logout-account">Logout</button>
+						<p>Warning! Accounts that are deleted are permanently gone and cannot be recovered.</p>
+						<h3>Delete Account:</h3>
+						<button id="delete-account">Delete</button>
+					</section>
+				</section>
+			`;
 }
 
 function logoutListener(){
@@ -270,10 +317,6 @@ function logoutListener(){
 		localStorage.removeItem('prjToken');
 		location.reload();
 	});
-}
-
-function logout(){
-
 }
 
 function deleteAccountListener(){
@@ -299,27 +342,57 @@ function deleteAccount(){
 
 function promptEnableListener(){
 	$('main').on('click.enable', '.prompt-text', function(event){
-		if($(this).hasClass('inactive-prompt')){
-			const y = $($(this).parent()).position();
-
-			const element_index = $(this).parent().index() - 1;
-
-			$($(this).parent()).html(`
-				<label for="text-prompt-${prompts[element_index].id}" class="prompt-text  active-prompt">${prompts[element_index].prompt}</label>
-				<textarea name="text-prompt-${prompts[element_index].id}"></textarea><br>
-				<button type="button" class="hide-prompt">Cancel</button>
-			`);
+		const prompt = this;
+		promptEnable(prompt);
+	});
+	$('main').on('keydown', '.prompt-text', function(event){
+		if(event.keyCode === 32 || event.keyCode === 13){
+			const prompt = this;
+			promptEnable(prompt);
 		}
 	});
 }
 
-function promptDisableListener(){
-	$('main').on('click', '.hide-prompt', function(event){
-		const element_index = $(this).parent().index() - 1;
+function promptEnable(prompt){
+	if($(prompt).hasClass('inactive-prompt')){
+		const element_index = $(prompt).parent().index() - 1;
+		$(prompt).removeClass('inactive-prompt');
+		$(prompt).addClass('active-prompt');
 
-		$($(this).parent()).html(`
-			<label for="text-prompt-${prompts[element_index].id}" class="prompt-text  inactive-prompt">${prompts[element_index].prompt}</label>
+		$($(prompt).parent()).html(`
+			<label for="text-prompt-${prompts[element_index].id}" class="prompt-text  active-prompt"  tabindex="0" role="button">&#9660 ${prompts[element_index].prompt}</label>
+			<textarea name="text-prompt-${prompts[element_index].id}" id="text-prompt-${prompts[element_index].id}"></textarea><br>
 		`);
+	}
+	else{
+		const element_index = $(prompt).parent().index() - 1;
+		$(prompt).removeClass('active-prompt');
+		$(this).addClass('inactive-prompt');
+
+		$($(prompt).parent()).html(`
+			<label for="text-prompt-${prompts[element_index].id}" class="prompt-text  inactive-prompt"  tabindex="0" role="button">&#9658 ${prompts[element_index].prompt}</label>
+		`);
+	}
+}
+
+function pictureInputListener(){
+	$('main').on('click', '.emotion-block', function(event){
+		const siblings = $(this).siblings();
+
+		$(this).addClass('emotion-selected')
+		$(siblings).removeClass('emotion-selected');
+
+		$($(this).find('input')).prop('checked', 'enable');
+	});
+	$('main').on('keydown', '.emotion-block', function(event){
+		if(event.keyCode === 32 || event.keyCode === 13){
+			const siblings = $(this).siblings();
+
+			$(this).addClass('emotion-selected')
+			$(siblings).removeClass('emotion-selected');
+
+			$($(this).find('input')).prop('checked', 'enable');
+		}
 	});
 }
 
@@ -328,7 +401,6 @@ function createListeners(){
 	loginPageListener();
 	loginListener();
 	pastEntriesSectionListener();
-	createNewEntryListener();
 	createAccountPageListener();
 	createAccountListener();
 	cancelAccountPageListener();
@@ -336,7 +408,7 @@ function createListeners(){
 	deleteAccountListener();
 	logoutListener();
 	promptEnableListener();
-	promptDisableListener();
+	pictureInputListener();
 }
 
 function main(){

@@ -1,13 +1,20 @@
+/* mobile default */
 #calendar-row {
 	text-align: center;
+	padding-top: 2vw;
+}
+
+#calendar-section h3{
+	font-size: 8vw;
 }
 
 #calendar-section {
-	background-color: #063852;
+	background-color: slategray;
 	color: white;
 	padding: 5px;
-	width: 260px;
-	height: 282px;
+	min-width: 260px;
+	width: calc(80vw);
+	max-width: 600px;
 	text-align: center;
 	border-radius: 2px;
 	font-family: 'Merriweather', serif;
@@ -21,16 +28,21 @@
 	cursor: default;
 }
 
+#calendar {
+	width: 100%;
+}
+
 td {
-	background-color: #4CB5F5;
+	background-color: azure;
 	color: black;
-	width: 30px;
+	min-width: 25px;
+	width: 14%;
 	border-radius: 2px;
 	text-align: center;
-	transition: 0.8s;
-	-webkit-transition: 0.8s;
 	padding: 4px;
-	font-size: 14px;
+	font-size: calc(3vw + 1px);
+	height: 7vw;
+	max-height: 50px;
 }
 
 td:hover {
@@ -38,49 +50,71 @@ td:hover {
 }
 
 td[data-pastEntry-day]:hover {
-	background-color: #5dff7f;
+	background-color: #4be4f5;
 	cursor: pointer;
 }
 
 td[data-current-day] {
-	background-color: #DFE166;
+	background-color: #00ff59;
+}
+
+td[data-future-day] {
+	color: white;
+	background-color: lightgray;
 }
 
 td[data-pastEntry-day]{
-	background-color: #eaeff9;
+	background-color: #4CB5F5;
 }
 
 td[data-current-day][data-pastEntry-day] {
-	background-color: #DFE166;
+	background-color: #00ff59;
 }
 
 .calendar-buttons {
-	transition: 0.5s;
-	-webkit-transition: 0.5s;
-	background-color: #F0810F;
+	background-color: #4CB5F5;
 	border: none;
 	border-radius: 2px;
-	width: 120px;
-	height: 40px;
-	font-weight: bold;
+	width: calc(50% - 5px);
+	height: 10vw;
+	max-height: 70px;
+	font-weight: bolder;
 	color: white;
+	font-size: 7vw;
 }
 
 .calendar-buttons:hover {
-	background-color: #ef4e0e;
+	background-color: #4be4f5;
 	cursor: pointer;
 }
 
-td[data-current-day][data-pastEntry-day]:hover {
-	background-color: #5dff7f;
+td[data-current-day]:hover {
+	background-color: #64fc80;
+	cursor: pointer;
 }
 
 .calendar-buttons:disabled {
-	background-color: grey;
+	background-color: lightgrey;
 	cursor: default;
 }
 
 #calendar-header {
 	font-size: 25px;
 	margin: 5px;
+}
+
+/* non-mobile default */
+@media only screen and (min-width: 640px) {
+  	td {
+		font-size: 20px;
+		height: 50px;
+	}
+
+	#calendar-section h3{
+		font-size: 60px;
+	}
+
+	.calendar-buttons{
+		font-size: 60px;
+	}
 }

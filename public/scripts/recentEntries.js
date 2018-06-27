@@ -2,16 +2,12 @@ function loadRecentEntriesPage(){
 	let element = `
 		<section class="col-9" id="selected">
 			<section class="row" id="calendar-row">
-				<h2>Find An Entry</h2>
 				<div id="calendar-section">
 					<h3 id="calendar-header"></h3>
-					<button id="prev-button" class="calendar-buttons" disabled="true">Previous</button>
-					<button id="next-button" class="calendar-buttons" disabled="true">Next</button>
+					<button id="prev-button" class="calendar-buttons" disabled="true">&#8592</button>
+					<button id="next-button" class="calendar-buttons" disabled="true">&#8594</button>
 					<table id="calendar"></table>
 				</div>
-			</section>
-			<section class="row" id="selected-row">
-				<section class="row" id="selected-entry"></section>
 			</section>
 		</section>
 		<section class="col-3" id="past-entries">
@@ -23,25 +19,27 @@ function loadRecentEntriesPage(){
 
 	$('main').html(element);
 
+	$(window).scrollTop(0);
+
 	reloadCalendar();
 }
 
 function getPastEntryList(){
 	let element = `
-		<h2>Recent Entries</h2>
+		<h2>Entries</h2>
 	`
 
 	if(RecentEntries.length === 0){
 		element = element.concat(noEntriesElement());
 	}
 	else{
-		for(let i = 0; i < RecentEntries.length; i++){
-			const entry = RecentEntries[i];
+		for(let i = RecentEntries.length; i > 0; i--){
+			const entry = RecentEntries[i - 1];
 			element = element.concat(`
-				<div class="entry-excerpt">
+				<div class="entry-excerpt" tabindex="0" role="button">
 					<h3>${Object.keys(DAYS_IN_MONTH[entry.month])} ${entry.date}, ${entry.year}</h3>
-					<p>Today I felt <b>${entry.daily_emotion}</b>...</p><br>
-					<p>${entry.emotion_summary}</p>
+					<img src='../images/${entry.daily_emotion}.png' alt="A picture of a ${entry.daily_emotion} face" class="emotion-excerpt">
+					<p>Today I felt <b>${entry.daily_emotion}</b>... ${entry.emotion_summary}</p>
 				</div>
 			`);
 		}
@@ -67,10 +65,13 @@ function showSelectedEntry(entry){
 	selected_entry = entry;
 
 	let element = `
-		<h2>${Object.keys(DAYS_IN_MONTH[entry.month])} ${entry.date}, ${entry.year}</h2>
-		<h3>My Emotional State:</h3>
-		<p>Today I felt <b>${entry.daily_emotion}</b>...</p>
-		<p>${entry.emotion_summary}</p>
+		<section class="col-12" id="selected">
+			<section class="row" id="selected-row">
+				<h2>${Object.keys(DAYS_IN_MONTH[entry.month])} ${entry.date}, ${entry.year}</h2>
+				<img src='../images/${entry.daily_emotion}-large.png' alt="A picture of a ${entry.daily_emotion} face" id="selected-entry-emotion">
+				<h3>My Emotional State:</h3>
+				<p>Today I felt <b>${entry.daily_emotion}</b>...</p>
+				<p>${entry.emotion_summary}</p>
 	`;
 
 	for(let i = 0; i < entry.optional_prompts.length; i++){
@@ -81,13 +82,18 @@ function showSelectedEntry(entry){
 	}
 
 	element = element.concat(`
-		<div id="edit-delete-box">
-			<button id="edit-button" class="button-blue">Edit</button>
-			<button id="delete-button" class="button-orange">Delete</button>
-		</div>
+				<div id="edit-delete-box">
+					<button id="return-button" class="button-blue" onclick="loadPastEntriesPage()">Calendar</button>
+					<button id="edit-button" class="button-blue">Edit</button>
+					<button id="delete-button" class="button-orange">Delete</button>
+				</div>
+			</section>
+		</section>
 	`);
 
-	$('#selected-row').html(element);
+	$('main').html(element);
+
+	$(window).scrollTop(0);
 }
 
 function editEntryElement(){
@@ -98,38 +104,40 @@ function editEntryElement(){
 		<form method="" action="" id="edit-entry-form">
 			<fieldset id="emotions-fieldset">
 				<legend>How do I feel today? (required)</legend>
-				<div class="emotion-block">
+				<div class="emotion-block" tabindex="0" role="button">
 					<label for="happy">Happy</label>
-					<input type="radio" name="daily-emotion" value="happy" required="true">
+					<img src="../images/happy.png" alt="A picture of a happy face">
+					<input type="radio" name="daily-emotion" value="happy" id="happy" required="true" tabindex="-1">
 				</div>
-				<div class="emotion-block">
-					<label for="sad">Sad</label>
-					<input type="radio" name="daily-emotion" value="sad" required="true">
-				</div>
-				<div class="emotion-block">
-					<label for="angry">Angry</label>
-					<input type="radio" name="daily-emotion" value="angry" required="true">
-				</div>
-				<div class="emotion-block">
-					<label for="confused">Confused</label>
-					<input type="radio" name="daily-emotion" value="confused" required="true">
-				</div>
-				<div class="emotion-block">
-					<label for="afraid">Afraid</label>
-					<input type="radio" name="daily-emotion" value="afraid" required="true">
-				</div>
-				<div class="emotion-block">
+				<div class="emotion-block" tabindex="0" role="button">
 					<label for="surprised">Surprised</label>
-					<input type="radio" name="daily-emotion" value="surprised" required="true">
+					<img src="../images/surprised.png" alt="A picture of a surprised face">
+					<input type="radio" name="daily-emotion" value="surprised" id="surprised" required="true" tabindex="-1">
 				</div>
-				<div class="emotion-block">
+				<div class="emotion-block" tabindex="0" role="button">
+					<label for="sad">Sad</label>
+					<img src="../images/sad.png" alt="A picture of a sad face">
+					<input type="radio" name="daily-emotion" value="sad" id="sad" required="true" tabindex="-1">
+				</div>
+				<div class="emotion-block" tabindex="0" role="button">
+					<label for="afraid">Afraid</label>
+					<img src="../images/afraid.png" alt="A picture of an afraid face">
+					<input type="radio" name="daily-emotion" value="afraid" id="afraid" required="true" tabindex="-1">
+				</div>
+				<div class="emotion-block" tabindex="0" role="button">
 					<label for="disgusted">Disgusted</label>
-					<input type="radio" name="daily-emotion" value="disgusted" required="true"><br>
+					<img src="../images/disgusted.png" alt="A picture of a disgusted face">
+					<input type="radio" name="daily-emotion" value="disgusted" id="disgusted" required="true" tabindex="-1"><br>
+				</div>
+				<div class="emotion-block" tabindex="0" role="button">
+					<label for="angry">Angry</label>
+					<img src="../images/angry.png" alt="A picture of an angry face">
+					<input type="radio" name="daily-emotion" value="angry" id="angry" required="true" tabindex="-1">
 				</div>
 				<br>
 
 				<label for="emotion-summary">Why do I think I feel this way? (required)</label>
-				<textarea name="emotion-summary" required="true" form="create-entry-form"></textarea>
+				<textarea name="emotion-summary" required="true" id="emotion-summary" form="create-entry-form"></textarea>
 			</fieldset>
 			<fieldset>
 				<legend></legend>
@@ -138,7 +146,7 @@ function editEntryElement(){
 	for(let i = 0; i < prompts.length; i++){
 		editEntryElement = editEntryElement.concat(`
 			<div class="prompt-option">
-				<label for="text-prompt-${prompts[i].id}" class="prompt-text  inactive-prompt">${prompts[i].prompt}</label>
+				<label for="text-prompt-${prompts[i].id}" class="prompt-text  inactive-prompt"  tabindex="0" role="button">&#9658 ${prompts[i].prompt}</label>
 			</div>
 		`);
 	}
@@ -151,20 +159,25 @@ function editEntryElement(){
 	`);
 
 	$('#selected-row').html(editEntryElement);
+
+	$(window).scrollTop(0);
 }
 
 // add the data from the entry to edit
 function populateEditForm(){
-	$(`input[value="${selected_entry.daily_emotion}"]`).prop('checked', true);
+	const block = $(`input[value="${selected_entry.daily_emotion}"]`);
+
+	$($(block).parent()).addClass('emotion-selected');
+	$(block).prop('checked', true);
+
 	$('[name="emotion-summary"]').val(selected_entry.emotion_summary);
 
 	for(let i = 0; i < selected_entry.optional_prompts.length; i++){
 		for(let j = 0; j < prompts.length; j++){
 			if(selected_entry.optional_prompts[i].prompt === prompts[j].prompt){
 				$($('.prompt-option')[j]).html(`
-					<label for="text-prompt-${prompts[j].id}" class="prompt-text  active-prompt">${prompts[j].prompt}</label>
-					<textarea name="text-prompt-${prompts[j].id}"></textarea><br>
-					<button type="button" class="hide-prompt">Cancel</button>
+					<label for="text-prompt-${prompts[j].id}" class="prompt-text  active-prompt"  tabindex="0" role="button">${prompts[j].prompt}</label>
+					<textarea name="text-prompt-${prompts[j].id}" id="text-prompt-${prompts[element_index].id}"></textarea><br>
 				`);
 
 				$(`[name="text-prompt-${j}"`).val(selected_entry.optional_prompts[i].answer);
@@ -201,11 +214,7 @@ function submitEntryEditsListener(){
 				xhr.setRequestHeader('Authorization', `Bearer ${localStorage.getItem('prjToken')}`);
 			},
 			success: function(){
-				loadRecentEntriesPage();
-				underlinePageLabel($('#past-entries-page'));
-
-				loadRecentEntries();
-				$('HTML, BODY').animate({scrollTop: 0});
+				loadPastEntriesPage();
 			}
 		});
 	});
@@ -252,11 +261,7 @@ function deleteEntry(){
 			xhr.setRequestHeader('Authorization', `Bearer ${localStorage.getItem('prjToken')}`);
 		},
 		success: function(){
-			loadRecentEntriesPage();
-			underlinePageLabel($('#past-entries-page'));
-
-			loadRecentEntries();
-			$('HTML, BODY').animate({scrollTop: 0});
+			loadPastEntriesPage();
 		}
 	});
 }
@@ -266,6 +271,13 @@ function selectedEntryListener(){
 		const entry = RecentEntries[$(this).index() - 1];
 
 		showSelectedEntry(entry);
+	});
+	$('main').on('keydown', '.entry-excerpt', function(event){
+		if(event.keyCode === 32 || event.keyCode === 13){
+			const entry = RecentEntries[$(this).index() - 1];
+
+			showSelectedEntry(entry);
+		}
 	});
 }
 

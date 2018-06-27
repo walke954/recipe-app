@@ -34,6 +34,7 @@ const localStrategy = new LocalStrategy((username, password, callback) => {
 			if(err === 'LoginError'){
 				return callback(null, false, err);
 			}
+			console.log(err);
 			return callback(err, false);
 		});
 });

@@ -14,7 +14,7 @@
 
 #login-form {
 	padding: 20px;
-	background-color: #eaeff9;
+	background-color: azure;
 	border-radius: 2px;
 }
 
@@ -38,12 +38,12 @@
 }
 
 #login-form button {
-	padding: 10px;
+	
 }
 
 #submit-form {
 	padding: 20px;
-	background-color: #eaeff9;
+	background-color: azure;
 	border-radius: 2px;
 }
 
@@ -116,7 +116,6 @@
 	}
 
 	#login-newUser-row {
-		background-color: #99ffb3;
 		width: 500px;
 	}
 }

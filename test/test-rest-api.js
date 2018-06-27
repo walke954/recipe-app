@@ -32,7 +32,13 @@ function generateRandomEntry(){
 	const month = Math.floor(Math.random() * (new Date().getMonth() + 1));
 
 	// obviously most months have 30 or 31 days, but that adds an unnecessary level of complexity, so we will just pretend every month has 28 days.
-	const date = Math.floor(Math.random() * 28);
+	let date = Math.floor(Math.random() * 28);
+
+	//can't post if todays date already has a post, so we need to change it then
+	if(date === new Date().getDate() && month === new Date().getMonth()){
+		date++;
+	}
+
 	const emotionStates = ['happy', 'sad', 'angry', 'confused', 'afraid', 'surprised', 'disgusted'];
 	const randomStrings = [
 		'laksjdf;lj',
@@ -94,7 +100,7 @@ function generateRandomCreateEntry(){
 	}
 
 	for(let i = 0; i < Prompts.length; i++){
-		if(Math.random() > 0.3){
+		if(Math.random() > 0.5){
 			obj[`text-prompt-${i}`] = randomStrings[Math.floor(Math.random() * randomStrings.length)];
 		}
 	}
@@ -205,9 +211,9 @@ describe('Test Rest API', function(){
 	});
 
 	describe('POST New Entry', function(){
-		it('a new entry should be posted to the server and database', function(){
-			const newEntry1 = generateRandomCreateEntry();
+		const newEntry1 = generateRandomCreateEntry();
 
+		it('a new entry should be posted to the server and database', function(){
 			return chai.request(app)
 				.post('/entries/')
 				.set('Accept','application/json')
@@ -282,24 +288,6 @@ describe('Test Rest API', function(){
 						expect(res.body.entries[i]).to.be.a('object');
 						expect(res.body.entries[i]).to.include.keys('_id', 'daily_emotion', 'emotion_summary', 'date', 'month', 'year', 'optional_prompts');
 					}
-
-					return User.findOne({username: username});
-				})
-				.then(function(user){
-					const entries = user.entries.filter(entry => {
-						return entry.month == queryMonth && entry.year == 2018;
-					});
-
-					const entry = user.entries[index];
-
-					resEntry = entry;
-
-					return entry;
-				})
-				.then(function(entry){
-					expect(entry.id).to.equal(resEntry.id);
-					expect(entry.daily_emotion).to.equal(resEntry.daily_emotion);
-					expect(entry.emotion_summary).to.equal(resEntry.emotion_summary);
 				});
 		});
 	});
@@ -334,7 +322,7 @@ describe('Test Rest API', function(){
 					entry = user.entries[index];
 					return chai.request(app)
 						.delete('/entries/' + entry.id)
-						.set('Authorization', `Bearer ${workingToken}`)
+						.set('Authorization', `Bearer ${workingToken}`);
 				})
 				.then(function(res){
 					expect(res).to.have.status(204);

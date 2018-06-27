@@ -4,6 +4,7 @@ function getPastEntryDates(){
 	for(let i = 0; i < RecentEntries.length; i++){
 		const entry_date = RecentEntries[i].date;
 		$(`[data-day='${entry_date}']`).attr('data-pastEntry-day', counter);
+		$(`[data-day='${entry_date}']`).attr('tabindex', 0);
 
 		counter++;
 	}
@@ -64,7 +65,7 @@ function constructCalendar(){
 						<td class="day">Sat</td>
 					</tr>`);
 
-	$($('main').find('#calendar-header')).html(`${Object.keys(DAYS_IN_MONTH[current_month])[0]}, ${current_year}`)
+	$($('main').find('#calendar-header')).html(`${Object.keys(DAYS_IN_MONTH[current_month])[0]}, ${current_year}`);
 
 	while(index_day <= days_in_month){
 		$($('main').find('#calendar')).append(constructCalendarRow(index_day, start_day, days_in_month, firstRow));
@@ -116,14 +117,44 @@ function constructCalendarRow(index_day, start_day, days_in_month, firstRow){
 
 function calendarDayListener(){
 	$('main').on('click', 'td', function(event){
-		const calendar_val = $(this).attr('data-pastEntry-day');
-		
-		if(calendar_val){
-			const selectedEntry = RecentEntries[calendar_val];
-
-			showSelectedEntry(selectedEntry);
+		getCalendarEntry(this);
+	});
+	$('main').on('keydown', 'td', function(event){
+		if(event.keyCode === 32 || event.keyCode === 13){
+			getCalendarEntry(this);
 		}
 	});
+}
+
+function getCalendarEntry(cell){
+	const calendar_past = $(cell).attr('data-pastEntry-day');
+	const calendar_today = $(cell).attr('data-current-day');
+	
+	if(calendar_past || calendar_today){
+		const dateCheck = RecentEntries.filter(entry => {
+			if(entry.date === new Date().getDate()){
+				return entry;
+			}
+		});
+
+		const selectedEntry = RecentEntries[calendar_past];
+
+		if(calendar_past){
+			showSelectedEntry(selectedEntry);
+		}
+		else{
+			if(dateCheck.length !== 0){
+				showSelectedEntry(selectedEntry);
+			}
+			else{
+				loadNewEntryPage();
+			}
+		}
+	}
+}
+
+function calendarDayEvent(){
+
 }
 
 function changeMonthListeners() {
@@ -159,6 +190,17 @@ function changeMonthListeners() {
 function addCurrentDay(){
 	if(current_year === new Date().getFullYear() && current_month === new Date().getMonth()){
 		$(`[data-day='${current_date}']`).attr('data-current-day', true);
+		$(`[data-day='${current_date}']`).attr('tabindex', 0);
+	}
+}
+
+function addFutureDays(){
+	if(current_year === new Date().getFullYear() && current_month === new Date().getMonth()){
+		const value = Object.values(DAYS_IN_MONTH[current_month]);
+		const days_to_add = value - current_date;
+		for(let i = 0; i < days_to_add; i++){
+			$(`[data-day='${value - i}']`).attr('data-future-day', true);
+		}
 	}
 }
 
@@ -178,6 +220,7 @@ function reloadCalendar(){
 	constructCalendar();
 
 	addCurrentDay();
+	addFutureDays();
 }
 
 function calendarMain(){

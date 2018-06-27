@@ -23,7 +23,7 @@
 }
 
 .row {
-    background-color: #eaeff9;
+    background-color: azure;
     padding: 5px;
     font-family: 'Open Sans', sans-serif;
     border-radius: 2px;
@@ -33,9 +33,14 @@ main {
 	padding: 10px;
 }
 
+header {
+	text-align: center;
+	font-size: 22px;
+}
+
 h1 {
 	text-align: center;
-	font-size: 30px;
+	font-size: 40px;
 	font-family: 'Libre Baskerville', serif;
 }
 
@@ -58,30 +63,28 @@ h3 {
 }
 
 .button-blue {
-	transition: 0.5s;
-	-webkit-transition: 0.5s;
 	margin: 10px 0px;
 	color: black;
 	background-color: #4CB5F5;
 	border: none;
 	border-radius: 2px;
-	padding: 5px;
+	font-size: 18px;
+	padding: 15px;
 }
 
 .button-blue:hover {
-	background-color: #5dff7f;
+	background-color: #4be4f5;
 	cursor: pointer;
 }
 
 .button-orange {
-	transition: 0.5s;
-	-webkit-transition: 0.5s;
 	margin: 10px 0px;
 	color: black;
 	background-color: #F0810F;
 	border: none;
 	border-radius: 2px;
-	padding: 5px;
+	font-size: 18px;
+	padding: 15px;
 }
 
 .button-orange:hover {
@@ -94,6 +97,18 @@ h3 {
 	main {
 		padding: 20px;
 	}
+
+	header p {
+		display: inline-block;
+		padding-right: 20px;
+		font-size: 4.5vw;
+	}
+
+	h1 {
+		text-align: center;
+		font-size: 8vw;
+		font-family: 'Libre Baskerville', serif;
+	}
 }
 
 /* non-mobile default */
@@ -102,8 +117,20 @@ h3 {
 		padding: 10px;
 	}
 
+	h1 {
+		font-size: 45px;
+	}
+
 	h2 {
 		font-size: 30px;
+	}
+
+	header {
+		text-align: left;
+	}
+
+	header p {
+		font-size: 25px;
 	}
 }
 
@@ -118,9 +145,5 @@ h3 {
 	.col-3 {
 		width: 25%;
 		float: left;
-	}
-
-	#entries-row h2 {
-		font-size: 25px;
 	}
 }
