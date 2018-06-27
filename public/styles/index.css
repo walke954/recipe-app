@@ -147,3 +147,9 @@ button {
 .emotion-selected.emotion-block {
 	background-color: #64fc80;
 }
+
+#username-text{
+	display: inline-block;
+	border: 1px solid #4be4f5;
+	padding: 5px;
+}

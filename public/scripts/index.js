@@ -22,9 +22,9 @@ function aboutPageElement(){
 				<section class="row" id="about-row">
 					<h2>About</h2>
 					<h3>What is 'Reflect'?</h3>
-					<p>The 'Person Reflective Journal' is a personal journal that is accessible to you and you alone. The journal utilizes a series of prompts that can allow you to reflect on the day and explore your emotional or personal state. I believe that reflection is one of the keys to dealing with our own personal struggles and that by writing (or typing) these conflicts can lead to clarity and positivity. While this should never completely substitute actual therapy conducted by a professional, this could certainly be used as a helpful tool for discovering your place in the world.</p>
+					<p>The 'Reflect' app is a personal journal that is accessible to you and you alone. The journal utilizes a series of prompts that can allow you to reflect on the day and explore your emotional or personal state. I believe that reflection is one of the keys to dealing with our own personal struggles and that by writing (or typing) these conflicts can lead to clarity and positivity. I hope you enjoy!</p>
 					<h3>How does it work?</h3>
-					<p>At the top of your 'Personal Page', you will see a calendar filled in with dates. Previous entries can be accessed through this interface in case you want to go back and read past entries. New entries can be posted through the 'New Entry' link, and can only be posted once per day. Each post consists of a series of required and optional prompts. Click the 'Post' button to create a new entry!</p><br><br>
+					<p>At the top of your 'Personal Page', you will see a calendar filled in with dates. Previous entries can be accessed through this interface in case you want to go back and read past entries. New entries can be posted by clicking on the most recent day on the calendar, and entries can only be posted once per day. Each post consists of a series of required and optional prompts. Click the 'Submit' button to create a new entry!</p><br><br>
 					<p><i>Emoji icons were created by Bruno Maia, IconTexto at <a href="http://www.icontexto.com">http://www.icontexto.com</a>.<br>
 						These icons were released under CC License Attribution-Noncommercial 3.0</i></p>
 				</section>
@@ -301,12 +301,12 @@ function accountPageElement(){
 					<section class="row">
 						<h1>Account Settings</h1>
 						<h3>Account Username:</h3>
-						<p>${profile_basics.username}</p>
+						<p id="username-text">${profile_basics.username}</p>
 						<h3>Sign Out:</h3>
-						<button id="logout-account">Logout</button>
-						<p>Warning! Accounts that are deleted are permanently gone and cannot be recovered.</p>
+						<button id="logout-account" class="button-blue">Logout</button>
 						<h3>Delete Account:</h3>
-						<button id="delete-account">Delete</button>
+						<p style="color:red">Warning! Accounts that are deleted are permanently gone and cannot be recovered.</p>
+						<button id="delete-account" class="button-orange">Delete</button>
 					</section>
 				</section>
 			`;
@@ -335,6 +335,7 @@ function deleteAccount(){
 			xhr.setRequestHeader('Authorization', `Bearer ${localStorage.getItem('prjToken')}`);
 		},
 		success: function(data){
+			localStorage.removeItem('prjToken');
 			location.reload();
 		}
 	});

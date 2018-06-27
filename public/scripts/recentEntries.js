@@ -177,7 +177,7 @@ function populateEditForm(){
 			if(selected_entry.optional_prompts[i].prompt === prompts[j].prompt){
 				$($('.prompt-option')[j]).html(`
 					<label for="text-prompt-${prompts[j].id}" class="prompt-text  active-prompt"  tabindex="0" role="button">${prompts[j].prompt}</label>
-					<textarea name="text-prompt-${prompts[j].id}" id="text-prompt-${prompts[element_index].id}"></textarea><br>
+					<textarea name="text-prompt-${prompts[j].id}" id="text-prompt-${prompts[j].id}"></textarea><br>
 				`);
 
 				$(`[name="text-prompt-${j}"`).val(selected_entry.optional_prompts[i].answer);
@@ -268,13 +268,13 @@ function deleteEntry(){
 
 function selectedEntryListener(){
 	$('main').on('click', '.entry-excerpt', function(event){
-		const entry = RecentEntries[$(this).index() - 1];
+		const entry = RecentEntries[RecentEntries.length - $(this).index()];
 
 		showSelectedEntry(entry);
 	});
 	$('main').on('keydown', '.entry-excerpt', function(event){
 		if(event.keyCode === 32 || event.keyCode === 13){
-			const entry = RecentEntries[$(this).index() - 1];
+			const entry = RecentEntries[RecentEntries.length - $(this).index()];
 
 			showSelectedEntry(entry);
 		}
