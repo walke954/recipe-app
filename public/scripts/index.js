@@ -96,6 +96,7 @@ function loginPageElement(){
 						<input type="text" name="username-input" id="username-input" required="true">
 						<label for="password-input">Password:</label>
 						<input type="password" name="password-input" id="password-input" required="true">
+						<p id="demo-link">Click <span class="link" onclick="demoLogin()">here</span> to login to an example account!</p>
 						<button class="button-blue">Login</button>
 						<p id="password-username-error"></p>
 					</fieldset>
@@ -174,6 +175,24 @@ function loginListener(){
 			}
 		});
 	});
+}
+
+function demoLogin(){
+	$.ajax({
+			url: 'auth/login',
+			data: {
+				username: 'example',
+				password: 'examplepassword'
+			},
+			type: 'POST',
+			success: function(data){
+				localStorage.setItem('prjToken', data.authToken);
+				logIn();
+			},
+			error: function(err){
+				$('#password-username-error').html('Sorry, this username or password is incorrect!<br>Please try again.');
+			}
+		});
 }
 
 function loadAppHome(){

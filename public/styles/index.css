@@ -5,10 +5,6 @@
 	outline: 0px;
 }
 
-*:focus {
-	outline: 5px dashed maroon;
-}
-
 body {
 	background-color: #eaeff9;
 	height: 100%;
@@ -59,7 +55,7 @@ header p:hover {
 }
 
 fieldset {
-	background-color: azure;
+	background-color: white;
 	border: none;
 }
 
@@ -152,4 +148,20 @@ button {
 	display: inline-block;
 	border: 1px solid #4be4f5;
 	padding: 5px;
+}
+
+#demo-link {
+	border: 2px dashed dodgerblue;
+	padding: 10px;
+	margin-bottom: 10px;
+}
+
+.link {
+	color: dodgerblue;
+	text-decoration: underline;
+}
+
+.link:hover {
+	color: purple;
+	cursor: pointer;
 }
