@@ -10,7 +10,7 @@ Password: examplepassword
 
 However, feel free to create your own as well in case you want the full experience.
 
-Try it out, at https://cryptic-reaches-81198.herokuapp.com/
+Try it out, at http://www.reflectapp.site/
 
 ![alt text](./pictures/calendar.png)
 
