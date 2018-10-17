@@ -75,7 +75,8 @@ function submitNewEntryListener(){
 
 		const body = {
 			daily_emotion: $('[name="daily-emotion"]:checked').val(),
-			emotion_summary: $('[name="emotion-summary"]').val()
+			emotion_summary: $('[name="emotion-summary"]').val(),
+			date: new Date()
 		}
 
 		const text_prompts = $('.prompt-option');

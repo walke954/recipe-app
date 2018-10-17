@@ -159,6 +159,8 @@ function loginListener(){
 	$('main').on('submit', '#login-form', function(event){
 		event.preventDefault();
 
+		$('body').css('cursor', 'progress');
+
 		$.ajax({
 			url: 'auth/login',
 			data: {
@@ -169,28 +171,37 @@ function loginListener(){
 			success: function(data){
 				localStorage.setItem('prjToken', data.authToken);
 				logIn();
+				$('body').css('cursor', 'default');
 			},
 			error: function(err){
 				$('#password-username-error').html('Sorry, this username or password is incorrect!<br>Please try again.');
+				$('body').css('cursor', 'default');
 			}
 		});
 	});
 }
 
 function demoLogin(){
+	const exampleuser = 'example';
+	const examplepassword = 'examplepassword';
+
+	$('body').css('cursor', 'progress');
+
 	$.ajax({
 			url: 'auth/login',
 			data: {
-				username: 'example',
-				password: 'examplepassword'
+				username: exampleuser,
+				password: examplepassword
 			},
 			type: 'POST',
 			success: function(data){
 				localStorage.setItem('prjToken', data.authToken);
 				logIn();
+				$('body').css('cursor', 'default');
 			},
 			error: function(err){
 				$('#password-username-error').html('Sorry, this username or password is incorrect!<br>Please try again.');
+				$('body').css('cursor', 'default');
 			}
 		});
 }

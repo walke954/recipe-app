@@ -69,7 +69,7 @@ router.post('/', jsonParser, checkNewEntryBody, (req, res) => {
 
 	const _username = getUsernameFromJwt(req);
 
-	const date = new Date();
+	const date = req.body.date;
 
 	const current_year = date.getFullYear();
 	const current_month = date.getMonth();
